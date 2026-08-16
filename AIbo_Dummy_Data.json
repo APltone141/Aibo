@@ -1,0 +1,819 @@
+{
+  "meta": {
+    "dataset_name": "AIbo Demo Business Dataset",
+    "version": "1.0",
+    "generated_for": "AIbo Web Prototype",
+    "currency": "IDR",
+    "locale": "id-ID",
+    "timezone": "Asia/Jakarta",
+    "data_period": {
+      "start": "2026-01-01",
+      "end": "2026-08-31"
+    }
+  },
+  "business": {
+    "id": "biz_001",
+    "name": "Nusa Brew Coffee",
+    "legal_name": "PT Nusa Brew Indonesia",
+    "industry": "Food & Beverage",
+    "sub_industry": "Coffee Shop & Roastery",
+    "business_type": "SMB",
+    "founded_year": 2022,
+    "headquarters": "Jakarta, Indonesia",
+    "employee_count": 24,
+    "branches": 3,
+    "business_model": "B2C",
+    "monthly_revenue_target": 500000000,
+    "currency": "IDR"
+  },
+  "user": {
+    "id": "usr_001",
+    "name": "Ardi Pratama",
+    "email": "ardi@nusabrew.demo",
+    "role": "Owner",
+    "avatar": null,
+    "last_login": "2026-08-11T09:42:00+07:00"
+  },
+  "team": [
+    {
+      "id": "usr_001",
+      "name": "Ardi Pratama",
+      "role": "Owner",
+      "status": "active"
+    },
+    {
+      "id": "usr_002",
+      "name": "Maya Putri",
+      "role": "Manager",
+      "status": "active"
+    },
+    {
+      "id": "usr_003",
+      "name": "Raka Wijaya",
+      "role": "Finance",
+      "status": "active"
+    },
+    {
+      "id": "usr_004",
+      "name": "Nadia Sari",
+      "role": "Marketing",
+      "status": "active"
+    }
+  ],
+  "business_health": {
+    "score": 82,
+    "status": "Healthy",
+    "previous_score": 78,
+    "score_change": 4,
+    "components": {
+      "revenue": 86,
+      "profitability": 81,
+      "customers": 84,
+      "marketing": 79,
+      "inventory": 80,
+      "cashflow": 85
+    },
+    "last_updated": "2026-08-11T08:30:00+07:00"
+  },
+  "kpis": {
+    "revenue": {
+      "current": 482000000,
+      "previous": 431000000,
+      "target": 500000000,
+      "change_percent": 11.83,
+      "trend": "up",
+      "status": "near_target"
+    },
+    "profit": {
+      "current": 96400000,
+      "previous": 77580000,
+      "target": 100000000,
+      "change_percent": 24.26,
+      "trend": "up",
+      "status": "near_target"
+    },
+    "profit_margin": {
+      "current": 20.0,
+      "previous": 18.0,
+      "target": 20.0,
+      "unit": "percent",
+      "trend": "up",
+      "status": "on_target"
+    },
+    "customers": {
+      "current": 1204,
+      "previous": 1089,
+      "target": 1250,
+      "change_percent": 10.56,
+      "trend": "up",
+      "status": "near_target"
+    },
+    "orders": {
+      "current": 1856,
+      "previous": 1692,
+      "change_percent": 9.69,
+      "trend": "up"
+    },
+    "average_order_value": {
+      "current": 259698,
+      "previous": 254728,
+      "change_percent": 1.95,
+      "trend": "up",
+      "currency": "IDR"
+    },
+    "marketing_roi": {
+      "current": 3.2,
+      "previous": 2.8,
+      "target": 3.5,
+      "change_percent": 14.29,
+      "trend": "up",
+      "unit": "x"
+    },
+    "inventory_health": {
+      "current": 86,
+      "previous": 82,
+      "target": 90,
+      "change_percent": 4.88,
+      "trend": "up",
+      "unit": "percent"
+    }
+  },
+  "revenue": {
+    "monthly": [
+      {
+        "month": "2026-01",
+        "revenue": 365000000
+      },
+      {
+        "month": "2026-02",
+        "revenue": 378000000
+      },
+      {
+        "month": "2026-03",
+        "revenue": 391000000
+      },
+      {
+        "month": "2026-04",
+        "revenue": 402000000
+      },
+      {
+        "month": "2026-05",
+        "revenue": 417000000
+      },
+      {
+        "month": "2026-06",
+        "revenue": 423000000
+      },
+      {
+        "month": "2026-07",
+        "revenue": 431000000
+      },
+      {
+        "month": "2026-08",
+        "revenue": 482000000
+      }
+    ],
+    "channels": [
+      {
+        "channel": "Store",
+        "revenue": 245000000,
+        "percentage": 50.83
+      },
+      {
+        "channel": "Online",
+        "revenue": 121000000,
+        "percentage": 25.10
+      },
+      {
+        "channel": "Marketplace",
+        "revenue": 76000000,
+        "percentage": 15.77
+      },
+      {
+        "channel": "Corporate",
+        "revenue": 40000000,
+        "percentage": 8.30
+      }
+    ]
+  },
+  "profit": {
+    "monthly": [
+      {
+        "month": "2026-01",
+        "profit": 62000000,
+        "margin": 16.99
+      },
+      {
+        "month": "2026-02",
+        "profit": 65000000,
+        "margin": 17.20
+      },
+      {
+        "month": "2026-03",
+        "profit": 68000000,
+        "margin": 17.39
+      },
+      {
+        "month": "2026-04",
+        "profit": 71000000,
+        "margin": 17.66
+      },
+      {
+        "month": "2026-05",
+        "profit": 76000000,
+        "margin": 18.23
+      },
+      {
+        "month": "2026-06",
+        "profit": 79000000,
+        "margin": 18.68
+      },
+      {
+        "month": "2026-07",
+        "profit": 77580000,
+        "margin": 18.00
+      },
+      {
+        "month": "2026-08",
+        "profit": 96400000,
+        "margin": 20.00
+      }
+    ]
+  },
+  "customers": {
+    "summary": {
+      "total": 1204,
+      "new_this_month": 187,
+      "returning": 1017,
+      "retention_rate": 78.4,
+      "churn_rate": 5.2
+    },
+    "monthly": [
+      {
+        "month": "2026-01",
+        "customers": 812,
+        "new_customers": 98
+      },
+      {
+        "month": "2026-02",
+        "customers": 856,
+        "new_customers": 104
+      },
+      {
+        "month": "2026-03",
+        "customers": 901,
+        "new_customers": 112
+      },
+      {
+        "month": "2026-04",
+        "customers": 947,
+        "new_customers": 121
+      },
+      {
+        "month": "2026-05",
+        "customers": 1002,
+        "new_customers": 139
+      },
+      {
+        "month": "2026-06",
+        "customers": 1048,
+        "new_customers": 151
+      },
+      {
+        "month": "2026-07",
+        "customers": 1089,
+        "new_customers": 166
+      },
+      {
+        "month": "2026-08",
+        "customers": 1204,
+        "new_customers": 187
+      }
+    ],
+    "segments": [
+      {
+        "name": "Loyal",
+        "customers": 418,
+        "percentage": 34.72
+      },
+      {
+        "name": "Returning",
+        "customers": 599,
+        "percentage": 49.75
+      },
+      {
+        "name": "New",
+        "customers": 187,
+        "percentage": 15.53
+      }
+    ]
+  },
+  "marketing": {
+    "spend": 75000000,
+    "revenue_attributed": 240000000,
+    "roi": 3.2,
+    "conversion_rate": 4.8,
+    "cost_per_acquisition": 62500,
+    "channels": [
+      {
+        "channel": "Instagram",
+        "spend": 22000000,
+        "revenue": 78000000,
+        "roi": 3.55,
+        "conversions": 412
+      },
+      {
+        "channel": "Google Ads",
+        "spend": 28000000,
+        "revenue": 96000000,
+        "roi": 3.43,
+        "conversions": 387
+      },
+      {
+        "channel": "TikTok",
+        "spend": 12000000,
+        "revenue": 31000000,
+        "roi": 2.58,
+        "conversions": 164
+      },
+      {
+        "channel": "Email",
+        "spend": 3000000,
+        "revenue": 18000000,
+        "roi": 6.0,
+        "conversions": 231
+      },
+      {
+        "channel": "Other",
+        "spend": 10000000,
+        "revenue": 17000000,
+        "roi": 1.7,
+        "conversions": 96
+      }
+    ]
+  },
+  "inventory": {
+    "health_score": 86,
+    "total_skus": 48,
+    "healthy_skus": 39,
+    "low_stock_skus": 6,
+    "overstock_skus": 3,
+    "items": [
+      {
+        "sku": "SKU-001",
+        "name": "House Blend 250g",
+        "stock": 24,
+        "reorder_point": 20,
+        "unit": "pack",
+        "unit_price": 65000,
+        "status": "healthy"
+      },
+      {
+        "sku": "SKU-002",
+        "name": "House Blend 1kg",
+        "stock": 8,
+        "reorder_point": 15,
+        "unit": "pack",
+        "unit_price": 220000,
+        "status": "low_stock"
+      },
+      {
+        "sku": "SKU-003",
+        "name": "Cold Brew Bottle",
+        "stock": 12,
+        "reorder_point": 10,
+        "unit": "btl",
+        "unit_price": 35000,
+        "status": "healthy"
+      },
+      {
+        "sku": "SKU-004",
+        "name": "Matcha Latte Powder",
+        "stock": 7,
+        "reorder_point": 12,
+        "unit": "kg",
+        "unit_price": 180000,
+        "status": "low_stock"
+      },
+      {
+        "sku": "SKU-005",
+        "name": "Chocolate Croissant",
+        "stock": 34,
+        "reorder_point": 20,
+        "unit": "pcs",
+        "unit_price": 28000,
+        "status": "overstock"
+      },
+      {
+        "sku": "SKU-006",
+        "name": "Signature Latte",
+        "stock": 18,
+        "reorder_point": 15,
+        "unit": "cup",
+        "unit_price": 38000,
+        "status": "healthy"
+      }
+    ]
+  },
+  "goals": [
+    {
+      "id": "goal_001",
+      "name": "Monthly Revenue",
+      "category": "Revenue",
+      "target": 500000000,
+      "current": 482000000,
+      "unit": "IDR",
+      "progress": 96.4,
+      "status": "on_track",
+      "deadline": "2026-08-31",
+      "forecast": 508000000
+    },
+    {
+      "id": "goal_002",
+      "name": "Monthly Profit",
+      "category": "Profit",
+      "target": 100000000,
+      "current": 96400000,
+      "unit": "IDR",
+      "progress": 96.4,
+      "status": "on_track",
+      "deadline": "2026-08-31",
+      "forecast": 102000000
+    },
+    {
+      "id": "goal_003",
+      "name": "Customer Growth",
+      "category": "Customer",
+      "target": 1250,
+      "current": 1204,
+      "unit": "customers",
+      "progress": 96.32,
+      "status": "on_track",
+      "deadline": "2026-08-31",
+      "forecast": 1280
+    },
+    {
+      "id": "goal_004",
+      "name": "Marketing ROI",
+      "category": "Marketing",
+      "target": 3.5,
+      "current": 3.2,
+      "unit": "x",
+      "progress": 91.43,
+      "status": "at_risk",
+      "deadline": "2026-08-31",
+      "forecast": 3.3
+    },
+    {
+      "id": "goal_005",
+      "name": "Inventory Health",
+      "category": "Operations",
+      "target": 90,
+      "current": 86,
+      "unit": "percent",
+      "progress": 95.56,
+      "status": "on_track",
+      "deadline": "2026-08-31",
+      "forecast": 91
+    }
+  ],
+  "ai_insights": [
+    {
+      "id": "insight_001",
+      "priority": "high",
+      "category": "Revenue",
+      "title": "Revenue is approaching the monthly target",
+      "summary": "Revenue reached Rp 482M, putting the business at 96.4% of the monthly target.",
+      "evidence": [
+        "Revenue increased 11.83% compared to July.",
+        "Online revenue increased 18.4%.",
+        "Corporate orders contributed Rp 40M."
+      ],
+      "impact": "High",
+      "confidence": 94,
+      "created_at": "2026-08-11T08:30:00+07:00"
+    },
+    {
+      "id": "insight_002",
+      "priority": "high",
+      "category": "Marketing",
+      "title": "Marketing ROI is below the target",
+      "summary": "Overall marketing ROI is 3.2x against the target of 3.5x.",
+      "evidence": [
+        "TikTok ROI is 2.58x.",
+        "Other marketing channels generate only 1.7x ROI.",
+        "Email generates the highest ROI at 6.0x."
+      ],
+      "impact": "Medium",
+      "confidence": 91,
+      "created_at": "2026-08-11T08:20:00+07:00"
+    },
+    {
+      "id": "insight_003",
+      "priority": "medium",
+      "category": "Inventory",
+      "title": "Six products require inventory attention",
+      "summary": "Six SKUs are currently below their reorder points.",
+      "evidence": [
+        "House Blend 1kg is 7 units below reorder point.",
+        "Matcha Latte Powder is 5 units below reorder point."
+      ],
+      "impact": "Medium",
+      "confidence": 96,
+      "created_at": "2026-08-11T08:10:00+07:00"
+    },
+    {
+      "id": "insight_004",
+      "priority": "medium",
+      "category": "Customer",
+      "title": "Customer growth is accelerating",
+      "summary": "Customer count increased to 1,204, up 10.56% from the previous month.",
+      "evidence": [
+        "187 new customers were acquired this month.",
+        "Retention rate remains at 78.4%."
+      ],
+      "impact": "Positive",
+      "confidence": 89,
+      "created_at": "2026-08-11T07:55:00+07:00"
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec_001",
+      "insight_id": "insight_002",
+      "title": "Shift part of TikTok budget to Email",
+      "description": "Move approximately Rp 5M of monthly TikTok spend toward the Email channel.",
+      "reason": "Email currently generates approximately 6.0x ROI compared with 2.58x on TikTok.",
+      "expected_impact": {
+        "metric": "Marketing ROI",
+        "from": 3.2,
+        "to": 3.45,
+        "estimated_revenue_gain": 8500000
+      },
+      "confidence": 87,
+      "difficulty": "Low",
+      "risk": "Low",
+      "status": "pending"
+    },
+    {
+      "id": "rec_002",
+      "insight_id": "insight_003",
+      "title": "Reorder low-stock products",
+      "description": "Prioritize House Blend 1kg and Matcha Latte Powder before the next sales cycle.",
+      "reason": "Both products are below their reorder points.",
+      "expected_impact": {
+        "metric": "Inventory Health",
+        "from": 86,
+        "to": 90
+      },
+      "confidence": 96,
+      "difficulty": "Low",
+      "risk": "Low",
+      "status": "pending"
+    },
+    {
+      "id": "rec_003",
+      "insight_id": "insight_001",
+      "title": "Push the best-performing online products",
+      "description": "Increase online promotion for products contributing the highest conversion.",
+      "reason": "Online revenue is growing faster than store revenue.",
+      "expected_impact": {
+        "metric": "Revenue",
+        "estimated_revenue_gain": 12000000
+      },
+      "confidence": 82,
+      "difficulty": "Medium",
+      "risk": "Medium",
+      "status": "pending"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task_001",
+      "title": "Review TikTok campaign performance",
+      "source": "AI Recommendation",
+      "priority": "High",
+      "assignee": "Nadia Sari",
+      "status": "in_progress",
+      "due_date": "2026-08-12",
+      "related_goal": "goal_004"
+    },
+    {
+      "id": "task_002",
+      "title": "Reorder House Blend 1kg",
+      "source": "AI Recommendation",
+      "priority": "High",
+      "assignee": "Maya Putri",
+      "status": "todo",
+      "due_date": "2026-08-12",
+      "related_goal": "goal_005"
+    },
+    {
+      "id": "task_003",
+      "title": "Reorder Matcha Latte Powder",
+      "source": "AI Recommendation",
+      "priority": "Medium",
+      "assignee": "Maya Putri",
+      "status": "todo",
+      "due_date": "2026-08-13",
+      "related_goal": "goal_005"
+    },
+    {
+      "id": "task_004",
+      "title": "Prepare weekend online promotion",
+      "source": "Owner",
+      "priority": "Medium",
+      "assignee": "Nadia Sari",
+      "status": "todo",
+      "due_date": "2026-08-14",
+      "related_goal": "goal_001"
+    },
+    {
+      "id": "task_005",
+      "title": "Review August profit margin",
+      "source": "Finance",
+      "priority": "Low",
+      "assignee": "Raka Wijaya",
+      "status": "completed",
+      "due_date": "2026-08-10",
+      "related_goal": "goal_002"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "alert_001",
+      "type": "warning",
+      "priority": "high",
+      "title": "Marketing ROI below target",
+      "description": "Current ROI is 3.2x compared with the 3.5x target.",
+      "related_goal": "goal_004",
+      "status": "unresolved"
+    },
+    {
+      "id": "alert_002",
+      "type": "warning",
+      "priority": "medium",
+      "title": "Low inventory detected",
+      "description": "Six SKUs are below reorder points.",
+      "related_goal": "goal_005",
+      "status": "unresolved"
+    },
+    {
+      "id": "alert_003",
+      "type": "success",
+      "priority": "low",
+      "title": "Revenue target nearly reached",
+      "description": "Revenue has reached 96.4% of the monthly target.",
+      "related_goal": "goal_001",
+      "status": "resolved"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif_001",
+      "type": "ai_insight",
+      "title": "New AI Insight",
+      "message": "Marketing ROI is below your target.",
+      "time": "10 minutes ago",
+      "read": false
+    },
+    {
+      "id": "notif_002",
+      "type": "goal",
+      "title": "Goal Update",
+      "message": "Revenue is now at 96.4% of your monthly target.",
+      "time": "25 minutes ago",
+      "read": false
+    },
+    {
+      "id": "notif_003",
+      "type": "task",
+      "title": "Task Due Tomorrow",
+      "message": "Review TikTok campaign performance.",
+      "time": "1 hour ago",
+      "read": true
+    },
+    {
+      "id": "notif_004",
+      "type": "inventory",
+      "title": "Inventory Alert",
+      "message": "House Blend 1kg is below reorder point.",
+      "time": "2 hours ago",
+      "read": true
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_001",
+      "name": "August Executive Summary",
+      "type": "Executive",
+      "period": "August 2026",
+      "status": "ready",
+      "created_at": "2026-08-11"
+    },
+    {
+      "id": "report_002",
+      "name": "August Revenue Report",
+      "type": "Revenue",
+      "period": "August 2026",
+      "status": "ready",
+      "created_at": "2026-08-11"
+    },
+    {
+      "id": "report_003",
+      "name": "August Marketing Performance",
+      "type": "Marketing",
+      "period": "August 2026",
+      "status": "ready",
+      "created_at": "2026-08-10"
+    }
+  ],
+  "integrations": [
+    {
+      "id": "int_001",
+      "platform": "Google Sheets",
+      "category": "Data Source",
+      "status": "connected",
+      "last_sync": "2026-08-11T07:00:00+07:00"
+    },
+    {
+      "id": "int_002",
+      "platform": "Google Analytics",
+      "category": "Analytics",
+      "status": "connected",
+      "last_sync": "2026-08-11T06:30:00+07:00"
+    },
+    {
+      "id": "int_003",
+      "platform": "Meta Ads",
+      "category": "Marketing",
+      "status": "connected",
+      "last_sync": "2026-08-11T06:00:00+07:00"
+    },
+    {
+      "id": "int_004",
+      "platform": "TikTok Ads",
+      "category": "Marketing",
+      "status": "connected",
+      "last_sync": "2026-08-11T05:45:00+07:00"
+    },
+    {
+      "id": "int_005",
+      "platform": "Accounting System",
+      "category": "Finance",
+      "status": "needs_attention",
+      "last_sync": "2026-08-09T04:00:00+07:00"
+    }
+  ],
+  "data_quality": {
+    "overall_score": 91,
+    "completeness": 94,
+    "accuracy": 92,
+    "consistency": 89,
+    "freshness": 88,
+    "issues": [
+      {
+        "type": "stale_data",
+        "source": "Accounting System",
+        "severity": "medium",
+        "description": "Finance data has not synchronized for 48 hours."
+      },
+      {
+        "type": "missing_field",
+        "source": "Google Sheets",
+        "severity": "low",
+        "description": "Three historical transactions are missing customer segment information."
+      }
+    ]
+  },
+  "activity": [
+    {
+      "id": "act_001",
+      "user": "Nadia Sari",
+      "action": "updated",
+      "object": "TikTok campaign",
+      "time": "2026-08-11T09:15:00+07:00"
+    },
+    {
+      "id": "act_002",
+      "user": "Maya Putri",
+      "action": "completed",
+      "object": "Inventory review",
+      "time": "2026-08-11T08:50:00+07:00"
+    },
+    {
+      "id": "act_003",
+      "user": "Raka Wijaya",
+      "action": "uploaded",
+      "object": "Finance report",
+      "time": "2026-08-11T08:20:00+07:00"
+    },
+    {
+      "id": "act_004",
+      "user": "Ardi Pratama",
+      "action": "viewed",
+      "object": "AI Business Brief",
+      "time": "2026-08-11T08:05:00+07:00"
+    }
+  ]
+}

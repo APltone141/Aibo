@@ -1,0 +1,23 @@
+# Reference & Documentation Folder
+Refern/
+refern/
+Refern/**
+refern/**
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Environment & Dependencies
+.env
+.env.local
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs & Temporary files
+*.log
+.tmp/
