@@ -872,6 +872,12 @@ function bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavig
             deleteCustomCalendarEvent(dBtn.dataset.id);
             showToast('Agenda kustom berhasil dihapus!', 'info');
             dashModal.style.display = 'none';
+
+            const calGridWrapper = document.getElementById('visual-calendar-grid-wrapper');
+            if (calGridWrapper) {
+              calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter, state.custom_events || []);
+              bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavigate);
+            }
           });
         });
       });
@@ -880,39 +886,60 @@ function bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavig
 }
 
 function renderAddEventForm(selectedDay, dashModal, modalTitle, modalBody, state, onNavigate) {
+  dashModal.style.display = 'flex';
   modalTitle.textContent = `➕ Tambah Agenda (${selectedDay} Agustus 2026)`;
+  
   modalBody.innerHTML = `
     <div style="display: flex; flex-direction: column; gap: 12px;">
       <div class="form-group">
-        <label class="form-label" style="font-size: 0.78rem;">Judul Agenda / Rapat / Catatan</label>
-        <input type="text" class="form-control" id="custom-evt-title" placeholder="cth: Meeting Supplier Biji Kopi Toraja" style="font-size: 0.82rem;">
+        <label class="form-label" style="font-size: 0.78rem;">Judul Agenda / Rapat / Catatan *</label>
+        <input type="text" class="form-control" id="custom-evt-title" placeholder="cth: Meeting Supplier Biji Kopi Toraja" style="font-size: 0.82rem;" autofocus>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         <div class="form-group">
-          <label class="form-label" style="font-size: 0.78rem;">Kategori</label>
-          <select class="form-control" id="custom-evt-cat" style="font-size: 0.82rem;">
-            <option value="Tugas">🎯 Tugas Operasional</option>
-            <option value="Marketing">📢 Pemasaran & Promo</option>
-            <option value="Stok">📦 Pengadaan / Stok</option>
-            <option value="Catatan" selected>📝 Catatan Bisnis Mandiri</option>
+          <label class="form-label" style="font-size: 0.78rem;">Tanggal (Agustus 2026)</label>
+          <select class="form-control" id="custom-evt-day" style="font-size: 0.82rem;">
+            ${Array.from({ length: 31 }, (_, i) => i + 1).map(d => `
+              <option value="${d}" ${d === selectedDay ? 'selected' : ''}>${d} Agustus 2026</option>
+            `).join('')}
           </select>
         </div>
         <div class="form-group">
+          <label class="form-label" style="font-size: 0.78rem;">Kategori Agenda</label>
+          <select class="form-control" id="custom-evt-cat" style="font-size: 0.82rem;">
+            <option value="Catatan" selected>📝 Catatan Bisnis Mandiri</option>
+            <option value="Tugas">🎯 Tugas Operasional</option>
+            <option value="Marketing">📢 Pemasaran & Promo</option>
+            <option value="Stok">📦 Pengadaan / Stok</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
           <label class="form-label" style="font-size: 0.78rem;">Waktu / Jam</label>
           <input type="text" class="form-control" id="custom-evt-time" value="10:00 WIB" style="font-size: 0.82rem;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="font-size: 0.78rem;">Prioritas</label>
+          <select class="form-control" id="custom-evt-priority" style="font-size: 0.82rem;">
+            <option value="Medium" selected>Sedang (Medium)</option>
+            <option value="High">Tinggi (High)</option>
+            <option value="Low">Rendah (Low)</option>
+          </select>
         </div>
       </div>
 
       <div class="form-group">
         <label class="form-label" style="font-size: 0.78rem;">Catatan Tambahan & Detail</label>
-        <textarea class="form-control" id="custom-evt-notes" rows="2" placeholder="Tuliskan catatan penting agenda..." style="font-size: 0.82rem;"></textarea>
+        <textarea class="form-control" id="custom-evt-notes" rows="2" placeholder="Tuliskan detail agenda penting..." style="font-size: 0.82rem;"></textarea>
       </div>
 
-      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 6px;">
+      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; border-top: 1px solid var(--border-color); padding-top: 10px;">
         <button class="btn btn-secondary btn-sm" id="btn-cancel-custom-evt">Batal</button>
-        <button class="btn btn-primary btn-sm" id="btn-save-custom-evt" style="font-weight: 700; padding: 8px 16px;">
-          💾 Simpan Agenda
+        <button class="btn btn-primary btn-sm" id="btn-save-custom-evt" style="font-weight: 700; padding: 8px 18px;">
+          💾 Simpan Agenda ke Kalender
         </button>
       </div>
     </div>
@@ -929,6 +956,7 @@ function renderAddEventForm(selectedDay, dashModal, modalTitle, modalBody, state
   if (saveBtn) {
     saveBtn.addEventListener('click', () => {
       const title = document.getElementById('custom-evt-title').value.trim();
+      const chosenDay = parseInt(document.getElementById('custom-evt-day').value, 10) || selectedDay;
       const category = document.getElementById('custom-evt-cat').value;
       const time = document.getElementById('custom-evt-time').value.trim();
       const notes = document.getElementById('custom-evt-notes').value.trim();
@@ -938,7 +966,7 @@ function renderAddEventForm(selectedDay, dashModal, modalTitle, modalBody, state
         return;
       }
 
-      const formattedDay = selectedDay < 10 ? `0${selectedDay}` : selectedDay;
+      const formattedDay = chosenDay < 10 ? `0${chosenDay}` : chosenDay;
       const dateStr = `2026-08-${formattedDay}`;
 
       addCustomCalendarEvent({
@@ -951,6 +979,13 @@ function renderAddEventForm(selectedDay, dashModal, modalTitle, modalBody, state
 
       showToast(`Agenda "${title}" berhasil disimpan di kalender!`, 'success');
       dashModal.style.display = 'none';
+
+      // Instantly re-render calendar grid without full reload
+      const calGridWrapper = document.getElementById('visual-calendar-grid-wrapper');
+      if (calGridWrapper) {
+        calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter, state.custom_events || []);
+        bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavigate);
+      }
     });
   }
 }
@@ -1024,6 +1059,12 @@ function showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate, 
       deleteCustomCalendarEvent(delSingleBtn.dataset.id);
       showToast('Agenda berhasil dihapus!', 'info');
       dashModal.style.display = 'none';
+
+      const calGridWrapper = document.getElementById('visual-calendar-grid-wrapper');
+      if (calGridWrapper) {
+        calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter, state.custom_events || []);
+        bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavigate);
+      }
     });
   }
 }
