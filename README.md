@@ -448,12 +448,14 @@ flowchart TD
 
 ---
 
-## ✨ Detail Fitur-Fitur Kunci (Phase 1 — 4.6)
+## ✨ Detail Fitur-Fitur Kunci (Phase 1 — 4.7)
 
-### 1. Kalender Visual Interaktif di Dashboard Utama
-* Grid kalender bulanan 7-kolom (Senin - Minggu) untuk bulan Agustus 2026.
-* Indikator warna acara: **Marketing 📢 (Pink)**, **Stok 📦 (Amber)**, **Tugas 🎯 (Indigo)**, dan **Goals 🏁 (Emerald)**.
-* Modal agenda harian interaktif saat tanggal diklik dengan tombol eksekusi cepat.
+### 1. Executive Dashboard & High-Impact Widgets
+* **Skor Kesehatan 6-Dimensi SVG Circular**: Mengukur Revenue, Profitabilitas, Pelanggan, Pemasaran, Stok, dan Arus Kas.
+* **Widget Kas Cair & Runway Operasional**: Menampilkan kas cair Rp 142.5M, daya tahan runway 4.8 bulan (Aman & Sehat), serta perbandingan arus masuk vs beban pengeluaran.
+* **Banner Peringatan Dini Anomali Kritis**: Floating alert real-time dengan tombol tindakan cepat `[ 📦 Reorder Stok ➔ ]` dan `[ ⚡ Optimasi Iklan ]`.
+* **Pita Ringkasan Progres Target Utama**: Bar progres target bulanan (Omzet Rp 500M / 96.4%) dengan estimasi AIbo Rp 512M dan klik interaktif membuka faktor pendorong (*drivers*).
+* **Kalender Visual Bulanan Interaktif & Agenda Mandiri**: Grid 7-kolom (Senin–Minggu), badge kategori acara (Ads, Stok, Tugas, Catatan, Goals), tombol tambah agenda mandiri (`addCustomCalendarEvent`), dan modal detail agenda.
 
 ### 2. Multi-Choice Optimalisasi Keputusan di Decision Center
 * 3 pilihan skenario per rekomendasi: **Opsi A (Agresif)**, **Opsi B (Seimbang)**, dan **Opsi C (Konservatif)**.

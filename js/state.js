@@ -166,6 +166,33 @@ function ensureStateSchemaCompleteness() {
       }
     ];
   }
+
+  // 5. Cashflow & Runway Indicator
+  if (!appState.cashflow) {
+    appState.cashflow = {
+      balance: 142500000,
+      monthly_burn: 29500000,
+      runway_months: 4.8,
+      status: 'Aman & Sehat',
+      inflow: 482000000,
+      outflow: 385600000
+    };
+  }
+
+  // 6. Custom Calendar Events / Notes
+  if (!appState.custom_events) {
+    appState.custom_events = [
+      {
+        id: 'evt_custom_001',
+        date: '2026-08-19',
+        title: 'Meeting Supplier Biji Kopi Toraja',
+        category: 'Tugas',
+        notes: 'Negosiasi harga pasokan batch panen Q4 dengan Koperasi Petani.',
+        time: '10:00 WIB',
+        createdBy: 'Ardi Pratama'
+      }
+    ];
+  }
 }
 
 export function saveState() {
@@ -551,6 +578,47 @@ export function recalculateHealthScore() {
   appState.business_health.score = Math.round(average);
   appState.business_health.score_change = appState.business_health.score - appState.business_health.previous_score;
   appState.business_health.status = appState.business_health.score >= 80 ? "Healthy" : (appState.business_health.score >= 60 ? "Warning" : "Critical");
+}
+
+// Calendar Custom Events / Business Notes Management
+export function addCustomCalendarEvent(event) {
+  if (!appState) return null;
+  if (!appState.custom_events) appState.custom_events = [];
+  
+  const newEvt = {
+    id: `evt_custom_${Date.now()}`,
+    date: event.date || '2026-08-16',
+    title: event.title || 'Agenda Baru',
+    category: event.category || 'Catatan',
+    notes: event.notes || '',
+    time: event.time || '09:00 WIB',
+    createdBy: appState.user ? appState.user.name : 'User'
+  };
+  
+  appState.custom_events.push(newEvt);
+  
+  addActivity(
+    appState.user ? appState.user.name : 'User',
+    'menambahkan agenda kalender',
+    `"${newEvt.title}" pada ${newEvt.date}`
+  );
+  
+  notifyStateChange();
+  return newEvt;
+}
+
+export function deleteCustomCalendarEvent(eventId) {
+  if (!appState || !appState.custom_events) return;
+  const index = appState.custom_events.findIndex(e => e.id === eventId);
+  if (index !== -1) {
+    const deleted = appState.custom_events.splice(index, 1)[0];
+    addActivity(
+      appState.user ? appState.user.name : 'User',
+      'menghapus agenda kalender',
+      `"${deleted.title}"`
+    );
+    notifyStateChange();
+  }
 }
 
 function resolveAlert(alertId) {

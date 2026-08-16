@@ -87,16 +87,22 @@ AIbo mengintegrasikan seluruh fungsionalitasnya berdasarkan 4 pilar arsitektur:
      * Menghitung rata-rata skor berbobot dari 6 pilar bisnis: **Revenue (Omset), Profitabilitas, Pelanggan, Pemasaran (ROI), Stok (Inventory), dan Arus Kas (Cash Flow)**.
      * Warna adaptif: Hijau ($\ge 80$), Kuning ($60-79$), Merah ($< 60$).
      * Modal Detail 6-Dimensi: Mengeklik gauge membuka rincian nilai 0–100 per dimensi, progres bar warna, status analisis, dan saran prioritas AIbo.
-  2. **AI Daily Executive Brief**: Ringkasan harian cerdas yang memaparkan performa omzet bulan berjalan, status anomali pemasaran, dan jumlah rekomendasi tertunda.
-  3. **4 Kartu KPI Interaktif dengan Sparkline**:
+  2. **Widget Sisa Kas Cair & Runway Arus Kas (*Cash Runway & Working Capital Indicator*)**:
+     * Menampilkan saldo kas cair operasional (**Rp 142.500.000**), estimasi daya tahan runway kas (**4.8 Bulan - Status Aman & Sehat**), arus masuk, dan beban pengeluaran operasional.
+  3. **Banner Peringatan Dini Anomali Kritis (*Smart Anomaly Alert Banner*)**:
+     * Deteksi anomali operasional real-time di bagian atas dashboard dengan tombol aksi cepat `[ 📦 Reorder Stok ➔ ]` dan `[ ⚡ Optimasi Iklan ]`.
+  4. **Pita Ringkasan Progres Target Utama (*Active Goal Progress Tracker Strip*)**:
+     * Progres bar visual target utama bulanan (Omzet Rp 500M / 96.4% tercapai) dengan estimasi capaian AIbo (Rp 512M) dan klik interaktif membuka rincian pendorong (*drivers*).
+  5. **AI Daily Executive Brief**: Ringkasan harian cerdas yang memaparkan performa omzet bulan berjalan, status anomali pemasaran, dan tombol pintas ke analitik/keputusan.
+  6. **4 Kartu KPI Interaktif dengan Sparkline**:
      * Kartu Total Omzet, Laba Bersih, Total Pelanggan, dan Kesehatan Stok.
      * Dilengkapi grafik garis mini (*sparkline SVG* 4 bulan terakhir), persentase pertumbuhan vs bulan lalu/target, dan modal detail metrik saat diklik.
-  4. **Split Panel Rekomendasi & Tugas**: Ringkasan rekomendasi pending dan 4 tugas teratas dengan kotak centang penyelesaian instan.
+  7. **Split Panel Rekomendasi & Tugas**: Ringkasan rekomendasi pending dan 4 tugas teratas dengan kotak centang penyelesaian instan.
 
 ---
 
 ### Modul 04: Kalender Visual Bulanan Interaktif & Agenda Bisnis
-* **Berkas Pengelola**: `js/components/dashboard.js`
+* **Berkas Pengelola**: `js/components/dashboard.js` & `js/state.js`
 * **Mekanisme & Kapabilitas**:
   1. **Grid Kalender Bulanan 7-Kolom (Senin — Minggu)**:
      * Menampilkan 31 hari bulan Agustus 2026 dengan offset hari yang presisi.
@@ -105,9 +111,14 @@ AIbo mengintegrasikan seluruh fungsionalitasnya berdasarkan 4 pilar arsitektur:
      * 📢 **Marketing Campaign (Pink)**: Promo Kemerdekaan (17 Agu) & Realokasi Iklan (20 Agu).
      * 📦 **Stok & Inventory (Amber)**: Reorder House Blend 1kg (22 Agu) & Matcha Powder (25 Agu).
      * 🎯 **Tugas Tim (Indigo)**: Review TikTok Ads (24 Agu) & Tagihan B2B (28 Agu).
+     * 📝 **Catatan & Agenda Mandiri (Cyan)**: Pertemuan supplier, bazar event, jadwal personal tim.
      * 🏁 **Target Goals (Emerald)**: Evaluasi Target Omzet Bulanan (31 Agu).
-  3. **Navigasi Bulan & Filter Kategori**: Tombol `◀ Jul`, `Agustus 2026`, `Sep ▶`, serta filter tombol (*Semua, 📢 Ads, 📦 Stok, 🎯 Tugas, 🏁 Goals*).
-  4. **Modal Detail Agenda Harian**: Mengeklik tanggal memunculkan modal detail agenda dengan deskripsi lengkap dan tombol jalan pintas langsung ke Decision Center atau Action Center.
+  3. **Navigasi Bulan & Filter Kategori**: Tombol `◀ Jul`, `Agustus 2026`, `Sep ▶`, serta filter tombol (*Semua, 📢 Ads, 📦 Stok, 🎯 Tugas, 📝 Catatan, 🏁 Goals*).
+  4. **Fitur Tambah Catatan & Agenda Mandiri (*Custom Calendar Events*)**:
+     * Tombol `[ ➕ Tambah Agenda / Catatan ]` di header kalender.
+     * Form modal input agenda: Judul Agenda, Kategori, Waktu/Jam, dan Catatan.
+     * Persistensi state ke `state.custom_events` dan kemampuan menghapus agenda kustom dengan tombol `[ 🗑️ Hapus ]`.
+  5. **Modal Detail Agenda Harian**: Mengeklik tanggal memunculkan modal detail agenda dengan rincian kegiatan dan tombol jalan pintas tindakan.
 
 ---
 

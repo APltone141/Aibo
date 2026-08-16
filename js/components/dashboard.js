@@ -1,17 +1,20 @@
 // dashboard.js
 // Executive Dashboard Module with 6-Dimension Health Gauge, AI Daily Brief,
-// Interactive Visual Month Calendar, Real-time KPI Cards, and Action Shortcuts.
+// Smart Anomaly Alert Banner, Cash Runway & Working Capital Indicator,
+// Active Goal Progress Tracker Strip, Interactive Visual Month Calendar with Custom Events,
+// Real-time KPI Cards, and Action Shortcuts.
 
 import { formatCurrency, formatPercent, formatNumber, renderLineChart, showToast, animateCounter } from '../utils.js';
-import { applyRecommendation, completeTask } from '../state.js';
+import { applyRecommendation, completeTask, addCustomCalendarEvent, deleteCustomCalendarEvent } from '../state.js';
 import { renderContextHelp } from './contextHelp.js';
 
 let currentCalendarMonth = 7; // August (0-indexed: 7)
 let currentCalendarYear = 2026;
 let currentCalendarFilter = 'all';
+let isAlertBannerDismissed = false;
 
 export function renderDashboard(container, state, onNavigate) {
-  // Support both (container, state, onNavigate) and legacy (state, container, onNavigate)
+  // Support polymorphic parameter orders
   let targetContainer = container;
   let targetState = state;
   if (container && !container.nodeType && state && state.nodeType) {
@@ -29,6 +32,8 @@ export function renderDashboard(container, state, onNavigate) {
   const recommendations = (targetState.recommendations || []).filter(r => r.status === 'pending');
   const tasks = (targetState.tasks || []).filter(t => t.status !== 'completed');
   const goals = targetState.goals || [];
+  const cashflow = targetState.cashflow || { balance: 142500000, monthly_burn: 29500000, runway_months: 4.8, status: 'Aman & Sehat' };
+  const primaryGoal = goals.length > 0 ? goals[0] : { name: 'Target Omzet Agustus 2026', current: 482000000, target: 500000000, progress: 96.4, deadline: '31 Agu 2026' };
 
   // Sparkline data from monthly trends
   const revenueTrendData = (targetState.revenue && targetState.revenue.monthly) ? targetState.revenue.monthly.map(m => ({ label: m.month, value: m.revenue })) : [];
@@ -50,271 +55,347 @@ export function renderDashboard(container, state, onNavigate) {
   }
 
   targetContainer.innerHTML = `
-    <!-- Top Executive Brief Header -->
-    <div class="dashboard-header-flex" style="display: flex; justify-content: space-between; align-items: stretch; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+    <div class="animate-fade-in" style="display: flex; flex-direction: column; gap: 20px;">
       
-      <!-- Health Score Circular Gauge Card -->
-      <div class="card health-gauge-card animate-fade-in" id="card-health-gauge" style="flex: 1; min-width: 280px; display: flex; align-items: center; gap: 18px; cursor: pointer; border-left: 4px solid ${healthColor}; background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);" title="Klik untuk membuka detail 6 dimensi kesehatan">
-        <div style="position: relative; width: 105px; height: 105px; flex-shrink: 0;">
-          <svg viewBox="0 0 100 100" style="transform: rotate(-90deg); width: 100%; height: 100%;">
-            <circle cx="50" cy="50" r="42" stroke="var(--border-color)" stroke-width="9" fill="none" opacity="0.4" />
-            <circle cx="50" cy="50" r="42" stroke="${healthColor}" stroke-width="9" fill="none"
-              stroke-dasharray="264"
-              stroke-dashoffset="${264 - (264 * health.score) / 100}"
-              stroke-linecap="round" style="transition: stroke-dashoffset 1s ease-in-out;" />
-          </svg>
-          <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <span style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-heading); color: ${healthColor}; line-height: 1;">${health.score}</span>
-            <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">/ 100</span>
-          </div>
-        </div>
-        
-        <div style="display: flex; flex-direction: column; gap: 4px;">
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <span class="badge" style="background-color: ${healthBg}; color: ${healthColor}; font-size: 0.75rem; font-weight: 700;">
-              ● ${healthText}
-            </span>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">6 Dimensi</span>
-          </div>
-          <h2 style="font-size: 1.1rem; font-weight: 700; margin: 2px 0;">Skor Kesehatan Bisnis ${renderContextHelp('business_health')}</h2>
-          <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.35;">
-            Kondisi finansial dan operasional Nusa Brew sangat prima. Klik untuk evaluasi 6 pilar.
-          </p>
-        </div>
-      </div>
-
-      <!-- AI Daily Executive Brief Card -->
-      <div class="card animate-fade-in" style="flex: 2; min-width: 320px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, var(--bg-card) 100%); border: 1px solid var(--border-color);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <div style="width: 28px; height: 28px; border-radius: 6px; background: var(--ai-primary-glow); display: flex; align-items: center; justify-content: center; font-size: 1rem;">
-              ✨
-            </div>
+      <!-- 1. SMART ANOMALY ALERT BANNER (Feature 2: Peringatan Dini Kritis) -->
+      ${!isAlertBannerDismissed ? `
+        <div class="card animate-fade-in" id="dashboard-alert-banner" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, var(--bg-card) 100%); border: 1px solid var(--warning); border-left: 5px solid var(--warning); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 1.4rem;">⚠️</span>
             <div>
-              <strong style="font-size: 0.95rem; color: var(--text-primary);">Ringkasan Harian AIbo (AI Daily Brief)</strong>
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">Update per 16 Agustus 2026</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <strong style="font-size: 0.92rem; color: var(--text-primary);">Peringatan Dini Operasional AIbo</strong>
+                <span class="badge badge-medium" style="font-size: 0.65rem;">Prioritas Tinggi</span>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+                Stok <strong>House Blend 1kg</strong> tersisa 14 unit (Estimasi habis 3 hari lagi) dan ROI <strong>TikTok Ads</strong> menurun ke 1.8x.
+              </p>
             </div>
           </div>
-          <span class="badge" style="background: var(--ai-primary-glow); color: var(--ai-primary); font-size: 0.7rem;">AI Copilot Aktif</span>
-        </div>
-
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.45; margin: 0;">
-          Omzet Agustus mencapai <strong>${formatCurrency(kpis.revenue.current)}</strong> (+${kpis.revenue.change_percent}%). Ada <strong>${recommendations.length} rekomendasi strategis</strong> untuk realokasi iklan dan restock 2 SKU produk kopi agar target laba tercapai optimal.
-        </p>
-
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button class="btn btn-primary btn-sm" id="btn-view-brief-recs" style="font-size: 0.78rem; padding: 6px 12px;">
-            ⚡ Tinjau Rekomendasi (${recommendations.length})
-          </button>
-          <button class="btn btn-secondary btn-sm" id="btn-view-analytics-shortcut" style="font-size: 0.78rem; padding: 6px 12px;">
-            📈 Eksplorasi 6-Tab Analitik
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Core KPI Dashboard Grid -->
-    <div class="grid-4">
-      
-      <!-- Revenue KPI -->
-      <div class="card kpi-card clickable-kpi" data-kpi="revenue" style="cursor: pointer;" title="Klik untuk detail breakdown omset">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Total Omset</span>
-          <span style="font-size: 0.7rem; color: var(--primary);">🔍</span>
-        </div>
-        <div class="kpi-val" id="kpi-revenue-val">${formatCurrency(kpis.revenue.current)}</div>
-        <div class="kpi-change change-up">
-          ▲ ${kpis.revenue.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">vs bulan lalu</span>
-        </div>
-        <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
-          ${renderLineChart(revenueTrendData.slice(-4), 160, 45, 'var(--primary)')}
-        </div>
-      </div>
-
-      <!-- Profit KPI -->
-      <div class="card kpi-card clickable-kpi" data-kpi="profit" style="cursor: pointer;" title="Klik untuk detail laba bersih">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Laba Bersih ${renderContextHelp('net_profit')}</span>
-          <span style="font-size: 0.7rem; color: var(--success);">🔍</span>
-        </div>
-        <div class="kpi-val" id="kpi-profit-val">${formatCurrency(kpis.profit.current)}</div>
-        <div class="kpi-change change-up">
-          ▲ ${kpis.profit.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">vs target</span>
-        </div>
-        <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
-          ${renderLineChart(profitTrendData.slice(-4), 160, 45, 'var(--success)')}
-        </div>
-      </div>
-
-      <!-- Customers KPI -->
-      <div class="card kpi-card clickable-kpi" data-kpi="customers" style="cursor: pointer;" title="Klik untuk detail pelanggan">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Total Pelanggan ${renderContextHelp('retention')}</span>
-          <span style="font-size: 0.7rem; color: var(--ai-primary);">🔍</span>
-        </div>
-        <div class="kpi-val" id="kpi-customers-val">${formatNumber(kpis.customers.current)}</div>
-        <div class="kpi-change change-up">
-          ▲ ${kpis.customers.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">akuisisi</span>
-        </div>
-        <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
-          ${renderLineChart(customerTrendData.slice(-4), 160, 45, 'var(--ai-primary)')}
-        </div>
-      </div>
-
-      <!-- Inventory KPI -->
-      <div class="card kpi-card clickable-kpi" data-kpi="inventory" style="cursor: pointer;" title="Klik untuk detail stok">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Kesehatan Stok</span>
-          <span style="font-size: 0.7rem; color: var(--warning);">🔍</span>
-        </div>
-        <div class="kpi-val">${formatPercent(kpis.inventory_health.current)}</div>
-        <div class="kpi-change ${kpis.inventory_health.current >= kpis.inventory_health.target ? 'change-up' : 'change-down'}" style="color: ${kpis.inventory_health.current >= kpis.inventory_health.target ? 'var(--success)' : 'var(--warning)'};">
-          ● Target: ${kpis.inventory_health.target}%
-        </div>
-        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px; display: flex; justify-content: space-between;">
-          <span>SKU Stok Rendah:</span>
-          <strong style="color: ${(targetState.inventory?.low_stock_skus || 0) > 0 ? 'var(--danger)' : 'var(--text-primary)'};">${targetState.inventory?.low_stock_skus || 0} SKU</strong>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Interactive Visual Calendar & Event Timeline Section -->
-    <div class="card animate-fade-in" style="margin-bottom: 20px;">
-      <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <span style="font-size: 1.1rem;">📅</span>
-          <div>
-            <strong style="font-size: 1.05rem;">Kalender Visual & Agenda Bisnis</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Jadwal promo campaign, reorder stok, tugas tim, dan evaluasi target</span>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="btn btn-sm btn-primary" id="btn-alert-reorder" style="font-size: 0.78rem; font-weight: 700; padding: 6px 12px;">
+              📦 Reorder Stok ➔
+            </button>
+            <button class="btn btn-sm btn-secondary" id="btn-alert-optimize-ads" style="font-size: 0.78rem; font-weight: 600; padding: 6px 12px;">
+              ⚡ Optimasi Iklan
+            </button>
+            <button class="btn btn-sm btn-secondary" id="btn-dismiss-alert" style="padding: 6px 8px;" title="Tutup Peringatan">&times;</button>
           </div>
         </div>
+      ` : ''}
 
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-          <!-- Month Switcher -->
-          <div style="display: flex; align-items: center; gap: 6px; background: var(--bg-primary); padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <button class="btn btn-sm btn-cal-month-nav" id="btn-cal-prev" style="background: none; border: none; padding: 2px 6px; cursor: pointer; color: var(--text-secondary);">◀</button>
-            <strong id="cal-month-label" style="font-size: 0.82rem; min-width: 100px; text-align: center;">Agustus 2026</strong>
-            <button class="btn btn-sm btn-cal-month-nav" id="btn-cal-next" style="background: none; border: none; padding: 2px 6px; cursor: pointer; color: var(--text-secondary);">▶</button>
-          </div>
-
-          <!-- Category Filters -->
-          <div style="display: flex; gap: 4px;" id="calendar-filter-bar">
-            <button class="btn btn-secondary btn-sm active-cal-filter" data-filter="all" style="padding: 4px 8px; font-size: 0.75rem;">Semua</button>
-            <button class="btn btn-secondary btn-sm" data-filter="marketing" style="padding: 4px 8px; font-size: 0.75rem;">📢 Ads</button>
-            <button class="btn btn-secondary btn-sm" data-filter="inventory" style="padding: 4px 8px; font-size: 0.75rem;">📦 Stok</button>
-            <button class="btn btn-secondary btn-sm" data-filter="tasks" style="padding: 4px 8px; font-size: 0.75rem;">🎯 Tugas</button>
-            <button class="btn btn-secondary btn-sm" data-filter="goals" style="padding: 4px 8px; font-size: 0.75rem;">🏁 Goals</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Visual Calendar Grid View (7 Columns: Sen - Min) -->
-      <div id="visual-calendar-grid-wrapper" style="margin-top: 14px;">
-        ${renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter)}
-      </div>
-
-      <!-- Compact Timeline Strip -->
-      <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-        <span style="font-size: 0.78rem; color: var(--text-muted);">
-          💡 <strong>Tips:</strong> Klik pada tanggal atau kartu acara untuk melihat agenda lengkap dan mengeksekusi tindakan.
-        </span>
-        <div style="display: flex; gap: 12px; font-size: 0.72rem; color: var(--text-secondary);">
-          <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #ec4899;"></span> Marketing Campaign</span>
-          <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b;"></span> Reorder Inventory</span>
-          <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #6366f1;"></span> Tugas Tim</span>
-          <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span> Target Milestone</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Recommendations & Tasks Split layout -->
-    <div class="grid-2">
-      <!-- Recommendations Section -->
-      <div class="card">
-        <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
-          <span>💡 Rekomendasi Strategis AIbo</span>
-          <span class="badge" style="background-color: var(--ai-primary-glow); color: var(--ai-primary);">${recommendations.length} Pending</span>
-        </div>
+      <!-- Top Executive Brief & Financial Runway Header -->
+      <div class="dashboard-header-flex" style="display: flex; justify-content: space-between; align-items: stretch; gap: 20px; flex-wrap: wrap;">
         
-        ${recommendations.length > 0 ? `
-          <div style="display: flex; flex-direction: column; gap: 14px;">
-            ${recommendations.map(r => `
-              <div class="rec-card" style="padding: 14px; border: 1px solid var(--border-color); background-color: var(--bg-input); border-radius: var(--radius-sm); display: flex; flex-direction: column; gap: 10px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                  <strong style="font-size: 0.9rem; color: var(--text-primary); line-height: 1.3;">${r.title}</strong>
-                  <span class="badge badge-high" style="font-size: 0.65rem; white-space: nowrap;">${r.impact}</span>
-                </div>
-                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">${r.root_cause || r.evidence}</p>
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 8px;">
-                  <span style="font-size: 0.75rem; color: var(--ai-primary); font-weight: 600;">Keyakinan AI: ${r.confidence}%</span>
-                  <div style="display: flex; gap: 6px;">
-                    <button class="btn btn-secondary btn-sm btn-view-rec-detail" data-id="${r.id}" style="font-size: 0.72rem; padding: 4px 8px;">Opsi Skenario</button>
-                    <button class="btn btn-primary btn-sm btn-apply-rec" data-id="${r.id}" style="font-size: 0.72rem; padding: 4px 8px;">Terapkan ⚡</button>
-                  </div>
-                </div>
-              </div>
-            `).join('')}
+        <!-- Health Score Circular Gauge Card -->
+        <div class="card health-gauge-card animate-fade-in" id="card-health-gauge" style="flex: 1.1; min-width: 280px; display: flex; align-items: center; gap: 18px; cursor: pointer; border-left: 4px solid ${healthColor}; background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);" title="Klik untuk membuka detail 6 dimensi kesehatan">
+          <div style="position: relative; width: 100px; height: 100px; flex-shrink: 0;">
+            <svg viewBox="0 0 100 100" style="transform: rotate(-90deg); width: 100%; height: 100%;">
+              <circle cx="50" cy="50" r="42" stroke="var(--border-color)" stroke-width="9" fill="none" opacity="0.4" />
+              <circle cx="50" cy="50" r="42" stroke="${healthColor}" stroke-width="9" fill="none"
+                stroke-dasharray="264"
+                stroke-dashoffset="${264 - (264 * health.score) / 100}"
+                stroke-linecap="round" style="transition: stroke-dashoffset 1s ease-in-out;" />
+            </svg>
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <span style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-heading); color: ${healthColor}; line-height: 1;">${health.score}</span>
+              <span style="font-size: 0.62rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">/ 100</span>
+            </div>
           </div>
-        ` : `
-          <div style="text-align: center; padding: 30px; color: var(--text-muted);">
-            <span>🎉 Semua rekomendasi telah diterapkan. Bisnis berjalan optimal!</span>
+          
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="badge" style="background-color: ${healthBg}; color: ${healthColor}; font-size: 0.72rem; font-weight: 700;">
+                ● ${healthText}
+              </span>
+              <span style="font-size: 0.7rem; color: var(--text-muted);">6 Dimensi</span>
+            </div>
+            <h2 style="font-size: 1.05rem; font-weight: 700; margin: 2px 0;">Skor Kesehatan Bisnis ${renderContextHelp('business_health')}</h2>
+            <p style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.35; margin: 0;">
+              Kondisi operasional Nusa Brew sangat prima. Klik untuk evaluasi 6 pilar.
+            </p>
           </div>
-        `}
-      </div>
-
-      <!-- Tasks Checklist Section -->
-      <div class="card">
-        <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
-          <span>🎯 Tindakan & Tugas Tim</span>
-          <span class="badge" style="background-color: var(--bg-secondary); color: var(--text-secondary);">${tasks.length} Aktif</span>
         </div>
 
-        ${tasks.length > 0 ? `
-          <div style="display: flex; flex-direction: column; gap: 10px;">
-            ${tasks.slice(0, 4).map(t => `
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-primary); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <button class="btn-checkbox-complete" data-id="${t.id}" style="width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--primary); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white;"></button>
-                  <div>
-                    <strong style="font-size: 0.83rem; color: var(--text-primary); display: block;">${t.title}</strong>
-                    <span style="font-size: 0.7rem; color: var(--text-muted);">Tenggat: ${t.due_date} • PIC: ${t.assignee}</span>
-                  </div>
-                </div>
-                <span class="badge ${t.priority === 'High' ? 'badge-high' : 'badge-medium'}" style="font-size: 0.65rem;">${t.priority}</span>
+        <!-- 2. CASH RUNWAY & WORKING CAPITAL INDICATOR (Feature 1: Indikator Kas & Runway) -->
+        <div class="card animate-fade-in" style="flex: 1.1; min-width: 280px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%); border-left: 4px solid var(--success);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 1.1rem;">💵</span>
+              <strong style="font-size: 0.9rem; color: var(--text-primary);">Kas Cair & Runway ${renderContextHelp('cash_flow')}</strong>
+            </div>
+            <span class="badge badge-low" style="font-size: 0.65rem;">${cashflow.status}</span>
+          </div>
+
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-heading); color: var(--success);">${formatCurrency(cashflow.balance)}</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">Runway: ${cashflow.runway_months} Bulan</span>
+            </div>
+            <div style="width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; margin: 6px 0;">
+              <div style="width: ${Math.min(100, (cashflow.runway_months / 6) * 100)}%; height: 100%; background: var(--success);"></div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
+            <span>Arus Masuk: <strong style="color: var(--success);">${formatCurrency(cashflow.inflow || 482000000)}</strong></span>
+            <span>Biaya Ops: <strong style="color: var(--danger);">${formatCurrency(cashflow.outflow || 385600000)}</strong></span>
+          </div>
+        </div>
+
+        <!-- AI Daily Executive Brief Card -->
+        <div class="card animate-fade-in" style="flex: 1.8; min-width: 320px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, var(--bg-card) 100%); border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 28px; height: 28px; border-radius: 6px; background: var(--ai-primary-glow); display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+                ✨
               </div>
-            `).join('')}
-            <button class="btn btn-secondary btn-sm" id="btn-goto-goals" style="margin-top: 6px; width: 100%; font-size: 0.78rem;">
-              Buka Semua Tugas di Action Center ➔
+              <div>
+                <strong style="font-size: 0.95rem; color: var(--text-primary);">Ringkasan Harian AIbo (AI Daily Brief)</strong>
+                <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">Update per 16 Agustus 2026</span>
+              </div>
+            </div>
+            <span class="badge" style="background: var(--ai-primary-glow); color: var(--ai-primary); font-size: 0.7rem;">AI Copilot Aktif</span>
+          </div>
+
+          <p style="font-size: 0.83rem; color: var(--text-secondary); line-height: 1.45; margin: 0;">
+            Omzet Agustus mencapai <strong>${formatCurrency(kpis.revenue.current)}</strong> (+${kpis.revenue.change_percent}%). Ada <strong>${recommendations.length} rekomendasi strategis</strong> untuk realokasi iklan dan restock 2 SKU produk kopi agar target laba tercapai optimal.
+          </p>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm" id="btn-view-brief-recs" style="font-size: 0.78rem; padding: 6px 12px;">
+              ⚡ Tinjau Rekomendasi (${recommendations.length})
+            </button>
+            <button class="btn btn-secondary btn-sm" id="btn-view-analytics-shortcut" style="font-size: 0.78rem; padding: 6px 12px;">
+              📈 Eksplorasi 6-Tab Analitik
             </button>
           </div>
-        ` : `
-          <div style="text-align: center; padding: 30px; color: var(--text-muted);">
-            <span>👍 Tidak ada tugas mendesak saat ini.</span>
-          </div>
-        `}
-      </div>
-    </div>
-
-    <!-- Health Gauge 6-Dimension Modal -->
-    <div id="health-detail-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.7); z-index: 1050; align-items: center; justify-content: center; padding: 20px;">
-      <div class="card animate-fade-in" style="width: 100%; max-width: 540px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
-          <div>
-            <h3 style="font-size: 1.15rem; font-weight: 700;">Evaluasi 6 Pilar Kesehatan Bisnis</h3>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Rata-rata Skor: ${health.score}/100 (${healthText})</span>
-          </div>
-          <button class="btn-close-modal" id="btn-close-health-modal" style="background: none; border: none; color: var(--text-secondary); font-size: 1.4rem; cursor: pointer;">&times;</button>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          ${renderHealthDimensionRow('Revenue (Omset)', health.components.revenue, 'Pertumbuhan omset positif +11.8%')}
-          ${renderHealthDimensionRow('Profitabilitas', health.components.profitability, 'Margin laba bersih stabil di 20%')}
-          ${renderHealthDimensionRow('Pelanggan', health.components.customers, 'Akuisisi pelanggan baru tumbuh +10.5%')}
-          ${renderHealthDimensionRow('Pemasaran (Marketing)', health.components.marketing, 'ROI TikTok Ads masih di bawah ekspektasi')}
-          ${renderHealthDimensionRow('Stok (Inventory)', health.components.inventory, '2 SKU produk dalam batas reorder kritis')}
-          ${renderHealthDimensionRow('Arus Kas (Cash Flow)', health.components.cashflow, 'Kas bersih positif di semua bulan')}
+      </div>
+
+      <!-- 3. ACTIVE GOAL PROGRESS TRACKER STRIP (Feature 3: Strip Target Utama) -->
+      <div class="card animate-fade-in" id="dashboard-goal-strip" style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 12px 18px; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease;" title="Klik untuk membuka rincian faktor pendorong target">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.1rem;">🎯</span>
+            <strong style="font-size: 0.88rem; color: var(--text-primary);">${primaryGoal.name}</strong>
+            <span class="badge badge-low" style="font-size: 0.65rem;">On Track</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            Progres: <strong style="color: var(--primary); font-size: 0.92rem;">${primaryGoal.progress || 96.4}%</strong> (${formatCurrency(primaryGoal.current || 482000000)} / ${formatCurrency(primaryGoal.target || 500000000)}) • <span style="color: var(--text-secondary);">Sisa 15 Hari</span>
+          </div>
+        </div>
+
+        <div style="width: 100%; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; margin-bottom: 4px;">
+          <div style="width: ${Math.min(100, primaryGoal.progress || 96.4)}%; height: 100%; background: linear-gradient(90deg, var(--primary) 0%, var(--ai-primary) 100%); border-radius: 4px;"></div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
+          <span>💡 Proyeksi AIbo: <strong>Rp 512.000.000 (+2.4% melampaui target)</strong> jika realokasi iklan dieksekusi.</span>
+          <span style="color: var(--primary); font-weight: 600;">Lihat Rincian Drivers ➔</span>
+        </div>
+      </div>
+
+      <!-- Core KPI Dashboard Grid -->
+      <div class="grid-4">
+        
+        <!-- Revenue KPI -->
+        <div class="card kpi-card clickable-kpi" data-kpi="revenue" style="cursor: pointer;" title="Klik untuk detail breakdown omset">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Total Omset</span>
+            <span style="font-size: 0.7rem; color: var(--primary);">🔍</span>
+          </div>
+          <div class="kpi-val" id="kpi-revenue-val">${formatCurrency(kpis.revenue.current)}</div>
+          <div class="kpi-change change-up">
+            ▲ ${kpis.revenue.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">vs bulan lalu</span>
+          </div>
+          <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
+            ${renderLineChart(revenueTrendData.slice(-4), 160, 45, 'var(--primary)')}
+          </div>
+        </div>
+
+        <!-- Profit KPI -->
+        <div class="card kpi-card clickable-kpi" data-kpi="profit" style="cursor: pointer;" title="Klik untuk detail laba bersih">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Laba Bersih ${renderContextHelp('net_profit')}</span>
+            <span style="font-size: 0.7rem; color: var(--success);">🔍</span>
+          </div>
+          <div class="kpi-val" id="kpi-profit-val">${formatCurrency(kpis.profit.current)}</div>
+          <div class="kpi-change change-up">
+            ▲ ${kpis.profit.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">vs target</span>
+          </div>
+          <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
+            ${renderLineChart(profitTrendData.slice(-4), 160, 45, 'var(--success)')}
+          </div>
+        </div>
+
+        <!-- Customers KPI -->
+        <div class="card kpi-card clickable-kpi" data-kpi="customers" style="cursor: pointer;" title="Klik untuk detail pelanggan">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Total Pelanggan ${renderContextHelp('retention')}</span>
+            <span style="font-size: 0.7rem; color: var(--ai-primary);">🔍</span>
+          </div>
+          <div class="kpi-val" id="kpi-customers-val">${formatNumber(kpis.customers.current)}</div>
+          <div class="kpi-change change-up">
+            ▲ ${kpis.customers.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">akuisisi</span>
+          </div>
+          <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
+            ${renderLineChart(customerTrendData.slice(-4), 160, 45, 'var(--ai-primary)')}
+          </div>
+        </div>
+
+        <!-- Inventory KPI -->
+        <div class="card kpi-card clickable-kpi" data-kpi="inventory" style="cursor: pointer;" title="Klik untuk detail stok">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Kesehatan Stok</span>
+            <span style="font-size: 0.7rem; color: var(--warning);">🔍</span>
+          </div>
+          <div class="kpi-val">${formatPercent(kpis.inventory_health.current)}</div>
+          <div class="kpi-change ${kpis.inventory_health.current >= kpis.inventory_health.target ? 'change-up' : 'change-down'}" style="color: ${kpis.inventory_health.current >= kpis.inventory_health.target ? 'var(--success)' : 'var(--warning)'};">
+            ● Target: ${kpis.inventory_health.target}%
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px; display: flex; justify-content: space-between;">
+            <span>SKU Stok Rendah:</span>
+            <strong style="color: ${(targetState.inventory?.low_stock_skus || 0) > 0 ? 'var(--danger)' : 'var(--text-primary)'};">${targetState.inventory?.low_stock_skus || 0} SKU</strong>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 4. INTERACTIVE VISUAL CALENDAR & CUSTOM EVENTS (Feature 4: Tambah Catatan & Agenda) -->
+      <div class="card animate-fade-in" style="margin-bottom: 0;">
+        <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.15rem;">📅</span>
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">Kalender Agenda Bisnis & Timeline Tindakan</h3>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Jadwal kampanye, batas stok, tugas tim, dan catatan mandiri</span>
+            </div>
+          </div>
+
+          <!-- Calendar Controls & Add Event Button -->
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            
+            <!-- Add Custom Event Button -->
+            <button class="btn btn-sm btn-primary" id="btn-open-add-event-modal" style="font-size: 0.78rem; font-weight: 700; padding: 6px 12px;">
+              ➕ Tambah Agenda / Catatan
+            </button>
+
+            <!-- Month Switcher -->
+            <div style="display: flex; align-items: center; gap: 4px; background: var(--bg-primary); padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <button class="btn btn-secondary btn-sm" id="btn-cal-prev" style="padding: 2px 8px; font-size: 0.75rem;">◀</button>
+              <strong style="font-size: 0.8rem; min-width: 95px; text-align: center;" id="cal-month-label">Agustus 2026</strong>
+              <button class="btn btn-secondary btn-sm" id="btn-cal-next" style="padding: 2px 8px; font-size: 0.75rem;">▶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Categories Pill Bar -->
+        <div style="display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;" id="calendar-filter-bar">
+          <button class="btn btn-sm ${currentCalendarFilter === 'all' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="all" style="font-size: 0.75rem; padding: 4px 10px;">Semua</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'marketing' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="marketing" style="font-size: 0.75rem; padding: 4px 10px;">📢 Marketing Ads</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'inventory' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="inventory" style="font-size: 0.75rem; padding: 4px 10px;">📦 Reorder Stok</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'tasks' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="tasks" style="font-size: 0.75rem; padding: 4px 10px;">🎯 Tugas Tim</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'custom' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="custom" style="font-size: 0.75rem; padding: 4px 10px;">📝 Catatan Mandiri</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'goals' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="goals" style="font-size: 0.75rem; padding: 4px 10px;">🏁 Target Goals</button>
+        </div>
+
+        <!-- 7-Column Visual Month Calendar Grid -->
+        <div id="visual-calendar-grid-wrapper">
+          ${renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter, targetState.custom_events || [])}
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 8px;">
+          <span>💡 <strong>Tips:</strong> Klik pada tanggal mana pun untuk melihat rincian agenda atau menambahkan catatan kustom baru.</span>
+          <span style="color: var(--ai-primary); font-weight: 600;">Sinkronisasi Real-time ✓</span>
+        </div>
+      </div>
+
+      <!-- Split 2-Column: Key Recommendations & Pending Tasks -->
+      <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; align-items: start;">
+        
+        <!-- Left: AI Recommendations List -->
+        <div class="card animate-fade-in">
+          <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>💡 Rekomendasi Prioritas AIbo</span>
+              <span class="badge badge-high" style="font-size: 0.65rem;">${recommendations.length} Pending</span>
+            </div>
+            <a id="btn-goto-decision" style="font-size: 0.78rem; color: var(--primary); cursor: pointer; font-weight: 600;">Lihat Semua ➔</a>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+            ${recommendations.slice(0, 2).map(r => `
+              <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-left: 4px solid var(--primary); padding: 14px; border-radius: var(--radius-sm); display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                  <strong style="font-size: 0.9rem; color: var(--text-primary); font-family: var(--font-display);">${r.title}</strong>
+                  <span class="badge badge-low" style="font-size: 0.65rem;">${r.confidence}% Keyakinan</span>
+                </div>
+                <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">${r.financial_impact}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                  <span style="font-size: 0.72rem; color: var(--text-muted);">Estimasi Upaya: <strong>${r.effort}</strong></span>
+                  <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-secondary btn-sm btn-view-rec-detail" data-id="${r.id}" style="font-size: 0.72rem; padding: 4px 8px;">
+                      Bukti Data
+                    </button>
+                    <button class="btn btn-primary btn-sm btn-apply-rec" data-id="${r.id}" style="font-size: 0.72rem; padding: 4px 8px;">
+                      Terapkan ⚡
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Right: Action Checklist & Tasks -->
+        <div class="card animate-fade-in">
+          <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>🎯 Tindakan & Tugas Tim</span>
+              <span class="badge badge-medium" style="font-size: 0.65rem;">${tasks.length} Terbuka</span>
+            </div>
+            <a id="btn-goto-actions" style="font-size: 0.78rem; color: var(--primary); cursor: pointer; font-weight: 600;">Action Center ➔</a>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+            ${tasks.slice(0, 4).map(t => `
+              <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-primary); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div class="custom-checkbox btn-checkbox-complete" data-id="${t.id}" style="cursor: pointer; width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0;" title="Tandai selesai">
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${t.title}</span>
+                  <span style="font-size: 0.7rem; color: var(--text-muted);">PIC: ${t.assignee} • Tenggat: ${t.due_date}</span>
+                </div>
+                <span class="badge ${t.priority === 'High' ? 'badge-high' : 'badge-low'}" style="font-size: 0.6rem;">${t.priority}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Health Dimension Detail Modal -->
+    <div id="health-detail-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 1050; align-items: center; justify-content: center; padding: 20px;">
+      <div class="card animate-fade-in" style="width: 100%; max-width: 580px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <div>
+            <h3 style="font-size: 1.2rem; font-weight: 700; color: ${healthColor};">Evaluasi 6 Dimensi Kesehatan Bisnis</h3>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Skor Agregat Terbobot: ${health.score} / 100 (${healthText})</span>
+          </div>
+          <button id="btn-close-health-modal" style="background: none; border: none; color: var(--text-secondary); font-size: 1.4rem; cursor: pointer;">&times;</button>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          ${renderHealthDimensionRow('💰 Revenue (Pertumbuhan Omzet)', health.components.revenue, 'Omset tumbuh +11.8% vs bulan lalu. Sangat sehat.')}
+          ${renderHealthDimensionRow('📊 Profitabilitas (Margin Bersih)', health.components.profitability, 'Margin laba 20.0% melampaui target minimum (18%).')}
+          ${renderHealthDimensionRow('👥 Pelanggan & Retensi', health.components.customers, 'Retensi pelanggan 68.2% stabil di atas benchmark industri.')}
+          ${renderHealthDimensionRow('📣 Efektivitas Pemasaran (ROI)', health.components.marketing, 'Email marketing sangat tinggi (ROI 6.0x), namun TikTok perlu realokasi.')}
+          ${renderHealthDimensionRow('📦 Kesehatan Persediaan (Stok)', health.components.inventory, '2 SKU produk berada di bawah batas minimum (reorder point).')}
+          ${renderHealthDimensionRow('💵 Arus Kas (Cash Flow & Runway)', health.components.cashflow || 85, 'Runway kas 4.8 bulan dengan arus kas operasional positif.')}
         </div>
 
         <div style="background: var(--bg-primary); padding: 12px 16px; border-radius: var(--radius-sm); border-left: 4px solid var(--ai-primary); font-size: 0.83rem; color: var(--text-secondary);">
@@ -323,9 +404,9 @@ export function renderDashboard(container, state, onNavigate) {
       </div>
     </div>
 
-    <!-- Generic Modal Container for Calendar / KPI Details -->
-    <div id="dashboard-detail-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.7); z-index: 1050; align-items: center; justify-content: center; padding: 20px;">
-      <div class="card animate-fade-in" style="width: 100%; max-width: 520px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px;">
+    <!-- Generic Modal Container for Calendar / KPI Details / Custom Events -->
+    <div id="dashboard-detail-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 1050; align-items: center; justify-content: center; padding: 20px;">
+      <div class="card animate-fade-in" style="width: 100%; max-width: 540px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
           <h3 id="dash-modal-title" style="font-size: 1.15rem; font-weight: 700;">Detail Agenda / Metric</h3>
           <button id="btn-close-dash-modal" style="background: none; border: none; color: var(--text-secondary); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -359,7 +440,7 @@ function renderHealthDimensionRow(name, score, statusText) {
   `;
 }
 
-// Master Calendar Events Data
+// Master Calendar Events Data (System Generated)
 const masterCalendarEvents = [
   { id: 'ev_001', day: 17, month: 7, year: 2026, type: 'marketing', title: '🇮🇩 Promo Kemerdekaan Kopi Merdeka', time: '08:00 - 22:00', priority: 'High', desc: 'Diskon 17% all espresso-based beverages via POS & Tokopedia.' },
   { id: 'ev_002', day: 20, month: 7, year: 2026, type: 'marketing', title: '📢 Realokasi Ad Spend TikTok -> Email', time: '10:00 WIB', priority: 'High', desc: 'Memindahkan budget Rp 5.000.000 ke Email Campaign member untuk mengejar ROI 6.0x.' },
@@ -371,7 +452,7 @@ const masterCalendarEvents = [
 ];
 
 // Render Interactive Visual Month Calendar (7 Columns: Sen, Sel, Rab, Kam, Jum, Sab, Min)
-function renderVisualMonthCalendar(monthIndex, year, filter) {
+function renderVisualMonthCalendar(monthIndex, year, filter, customEvents = []) {
   const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   const dayNames = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
   
@@ -379,10 +460,31 @@ function renderVisualMonthCalendar(monthIndex, year, filter) {
   const totalDays = 31;
   const startDayOffset = 5; // 0: Sen, 1: Sel, 2: Rab, 3: Kam, 4: Jum, 5: Sab, 6: Min
 
+  // Combine system events and custom user events
+  const allEvents = [
+    ...masterCalendarEvents,
+    ...customEvents.map(c => {
+      const parts = (c.date || '').split('-');
+      const d = parts.length === 3 ? parseInt(parts[2], 10) : 16;
+      return {
+        id: c.id,
+        day: d,
+        month: 7, // August
+        year: 2026,
+        type: 'custom',
+        title: `📝 ${c.title}`,
+        time: c.time || '09:00 WIB',
+        priority: 'Medium',
+        desc: c.notes || 'Catatan agenda mandiri.',
+        isCustom: true
+      };
+    })
+  ];
+
   // Filter events
   const filteredEvents = filter === 'all' 
-    ? masterCalendarEvents 
-    : masterCalendarEvents.filter(e => e.type === filter);
+    ? allEvents 
+    : allEvents.filter(e => e.type === filter);
 
   let gridCells = '';
 
@@ -414,6 +516,7 @@ function renderVisualMonthCalendar(monthIndex, year, filter) {
         if (e.type === 'inventory') color = '#f59e0b';
         else if (e.type === 'tasks') color = '#6366f1';
         else if (e.type === 'goals') color = '#10b981';
+        else if (e.type === 'custom') color = '#06b6d4';
 
         return `
           <div class="cal-event-pill" data-event-id="${e.id}" style="background: ${color}22; border-left: 3px solid ${color}; padding: 2px 4px; border-radius: 3px; font-size: 0.65rem; color: var(--text-primary); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; margin-top: 2px;" title="${e.title} (${e.time})">
@@ -445,6 +548,33 @@ function renderVisualMonthCalendar(monthIndex, year, filter) {
 }
 
 function bindEvents(state, onNavigate) {
+  // Alert Banner Bindings
+  const dismissAlertBtn = document.getElementById('btn-dismiss-alert');
+  const alertBanner = document.getElementById('dashboard-alert-banner');
+  if (dismissAlertBtn && alertBanner) {
+    dismissAlertBtn.addEventListener('click', () => {
+      isAlertBannerDismissed = true;
+      alertBanner.style.display = 'none';
+      showToast('Peringatan disembunyikan untuk sesi ini.', 'info');
+    });
+  }
+
+  const alertReorderBtn = document.getElementById('btn-alert-reorder');
+  if (alertReorderBtn) {
+    alertReorderBtn.addEventListener('click', () => onNavigate('action'));
+  }
+
+  const alertOptimizeAdsBtn = document.getElementById('btn-alert-optimize-ads');
+  if (alertOptimizeAdsBtn) {
+    alertOptimizeAdsBtn.addEventListener('click', () => onNavigate('decision'));
+  }
+
+  // Active Goal Progress Tracker Strip Click -> Jumps to Action / Opens Goal Detail
+  const goalStrip = document.getElementById('dashboard-goal-strip');
+  if (goalStrip) {
+    goalStrip.addEventListener('click', () => onNavigate('action'));
+  }
+
   // Health Gauge Click -> Detail Modal
   const healthCard = document.getElementById('card-health-gauge');
   const healthModal = document.getElementById('health-detail-modal');
@@ -462,7 +592,7 @@ function bindEvents(state, onNavigate) {
     });
   }
 
-  // Clickable KPI Cards
+  // Clickable KPI Cards -> Drilldown Modal
   const kpiCards = document.querySelectorAll('.clickable-kpi');
   const dashModal = document.getElementById('dashboard-detail-modal');
   const closeDashModalBtn = document.getElementById('btn-close-dash-modal');
@@ -510,7 +640,7 @@ function bindEvents(state, onNavigate) {
           modalTitle.textContent = "📦 Detail Kesehatan Stok Produk";
           modalBody.innerHTML = `
             <div style="display: flex; justify-content: space-between;"><span>Skor Kesehatan Stok:</span><strong>${state.kpis.inventory_health.current}%</strong></div>
-            <div style="display: flex; justify-content: space-between;"><span>SKU Stok Kritis (Reorder):</span><span style="color: var(--danger); font-weight: bold;">${state.inventory.low_stock_skus} SKU</span></div>
+            <div style="display: flex; justify-content: space-between;"><span>SKU Stok Kritis (Reorder):</span><span style="color: var(--danger); font-weight: bold;">${state.inventory?.low_stock_skus || 2} SKU</span></div>
             <div style="display: flex; justify-content: space-between;"><span>Target Kesehatan:</span><span>${state.kpis.inventory_health.target}%</span></div>
             <div style="background: var(--bg-primary); padding: 10px; border-radius: 6px; margin-top: 8px;">
               <strong>Pendorong Utama:</strong> 2 produk (House Blend 1kg & Matcha Powder) menyentuh reorder point dan perlu restock segera.
@@ -532,7 +662,15 @@ function bindEvents(state, onNavigate) {
   }
 
   // Calendar Event / Day Cell Clicks -> Opens Modal
-  bindCalendarCellEvents(dashModal, modalTitle, modalBody, onNavigate);
+  bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavigate);
+
+  // Add Custom Event Modal Trigger
+  const openAddEventBtn = document.getElementById('btn-open-add-event-modal');
+  if (openAddEventBtn && dashModal && modalTitle && modalBody) {
+    openAddEventBtn.addEventListener('click', () => {
+      renderAddEventForm(16, dashModal, modalTitle, modalBody, state, onNavigate);
+    });
+  }
 
   // Calendar Month Navigation
   const prevMonthBtn = document.getElementById('btn-cal-prev');
@@ -544,15 +682,15 @@ function bindEvents(state, onNavigate) {
     prevMonthBtn.addEventListener('click', () => {
       currentCalendarMonth = Math.max(0, currentCalendarMonth - 1);
       monthLabel.textContent = currentCalendarMonth === 6 ? 'Juli 2026' : (currentCalendarMonth === 7 ? 'Agustus 2026' : 'Juni 2026');
-      calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter);
-      bindCalendarCellEvents(dashModal, modalTitle, modalBody, onNavigate);
+      calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter, state.custom_events || []);
+      bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavigate);
     });
 
     nextMonthBtn.addEventListener('click', () => {
       currentCalendarMonth = Math.min(11, currentCalendarMonth + 1);
       monthLabel.textContent = currentCalendarMonth === 8 ? 'September 2026' : (currentCalendarMonth === 7 ? 'Agustus 2026' : 'Oktober 2026');
-      calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter);
-      bindCalendarCellEvents(dashModal, modalTitle, modalBody, onNavigate);
+      calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter, state.custom_events || []);
+      bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavigate);
     });
   }
 
@@ -561,11 +699,15 @@ function bindEvents(state, onNavigate) {
   if (calFilterBtns && calGridWrapper) {
     calFilterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        calFilterBtns.forEach(b => b.classList.remove('active-cal-filter'));
+        calFilterBtns.forEach(b => {
+          b.classList.remove('active-cal-filter');
+          b.classList.add('btn-secondary');
+        });
         btn.classList.add('active-cal-filter');
+        btn.classList.remove('btn-secondary');
         currentCalendarFilter = btn.dataset.filter;
-        calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter);
-        bindCalendarCellEvents(dashModal, modalTitle, modalBody, onNavigate);
+        calGridWrapper.innerHTML = renderVisualMonthCalendar(currentCalendarMonth, currentCalendarYear, currentCalendarFilter, state.custom_events || []);
+        bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavigate);
       });
     });
   }
@@ -622,52 +764,198 @@ function bindEvents(state, onNavigate) {
     viewBriefRecsBtn.addEventListener('click', () => onNavigate('decision'));
   }
 
-  const gotoGoalsBtn = document.getElementById('btn-goto-goals');
-  if (gotoGoalsBtn) {
-    gotoGoalsBtn.addEventListener('click', () => onNavigate('action'));
+  const gotoDecisionBtn = document.getElementById('btn-goto-decision');
+  if (gotoDecisionBtn) {
+    gotoDecisionBtn.addEventListener('click', () => onNavigate('decision'));
+  }
+
+  const gotoActionsBtn = document.getElementById('btn-goto-actions');
+  if (gotoActionsBtn) {
+    gotoActionsBtn.addEventListener('click', () => onNavigate('action'));
   }
 }
 
 // Helper: Bind Calendar Cell & Pill clicks to modal
-function bindCalendarCellEvents(dashModal, modalTitle, modalBody, onNavigate) {
+function bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavigate) {
   const dayCells = document.querySelectorAll('.cal-day-cell');
   const eventPills = document.querySelectorAll('.cal-event-pill');
+  const customEvents = state.custom_events || [];
+
+  const allEvents = [
+    ...masterCalendarEvents,
+    ...customEvents.map(c => {
+      const parts = (c.date || '').split('-');
+      const d = parts.length === 3 ? parseInt(parts[2], 10) : 16;
+      return {
+        id: c.id,
+        day: d,
+        month: 7,
+        year: 2026,
+        type: 'custom',
+        title: c.title,
+        time: c.time || '09:00 WIB',
+        priority: 'Medium',
+        desc: c.notes || 'Catatan agenda mandiri.',
+        isCustom: true
+      };
+    })
+  ];
 
   if (dashModal && modalTitle && modalBody) {
     eventPills.forEach(pill => {
       pill.addEventListener('click', (e) => {
         e.stopPropagation();
         const eventId = pill.dataset.eventId;
-        const ev = masterCalendarEvents.find(x => x.id === eventId);
+        const ev = allEvents.find(x => x.id === eventId);
         if (ev) {
-          showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate);
+          showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate, state);
         }
       });
     });
 
     dayCells.forEach(cell => {
       cell.addEventListener('click', () => {
-        const day = parseInt(cell.dataset.day);
-        const dayEvents = masterCalendarEvents.filter(e => e.day === day && e.month === currentCalendarMonth);
+        const day = parseInt(cell.dataset.day, 10);
+        const dayEvents = allEvents.filter(e => e.day === day && e.month === currentCalendarMonth);
+        
+        modalTitle.textContent = `📅 Agenda Tanggal ${day} Agustus 2026`;
+        let eventsHtml = '';
         
         if (dayEvents.length > 0) {
-          showEventModalDetail(dayEvents[0], dashModal, modalTitle, modalBody, onNavigate);
-        } else {
-          modalTitle.textContent = `📅 Agenda Tanggal ${day} Agustus 2026`;
-          modalBody.innerHTML = `
-            <p>Tidak ada event bisnis atau batas reorder khusus pada tanggal ini.</p>
-            <div style="background: var(--bg-primary); padding: 12px; border-radius: 6px;">
-              <span>Status Operasional: <strong>Normal</strong></span>
+          eventsHtml = `
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+              ${dayEvents.map(ev => `
+                <div style="background: var(--bg-primary); padding: 10px 12px; border-radius: 6px; border-left: 4px solid ${ev.type === 'marketing' ? '#ec4899' : (ev.type === 'inventory' ? '#f59e0b' : (ev.type === 'tasks' ? '#6366f1' : (ev.type === 'custom' ? '#06b6d4' : '#10b981')))}; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                  <div>
+                    <strong style="font-size: 0.86rem; color: var(--text-primary);">${ev.title}</strong>
+                    <span style="font-size: 0.74rem; color: var(--text-muted); display: block;">⏰ ${ev.time} • ${ev.desc}</span>
+                  </div>
+                  ${ev.isCustom ? `
+                    <button class="btn btn-sm btn-secondary btn-delete-custom-evt" data-id="${ev.id}" style="color: var(--danger); padding: 2px 6px; font-size: 0.7rem;" title="Hapus Agenda">🗑️</button>
+                  ` : ''}
+                </div>
+              `).join('')}
             </div>
           `;
-          dashModal.style.display = 'flex';
+        } else {
+          eventsHtml = `
+            <div style="background: var(--bg-primary); padding: 12px; border-radius: 6px; margin-bottom: 14px; text-align: center; color: var(--text-muted); font-size: 0.82rem;">
+              Belum ada agenda khusus pada tanggal ini.
+            </div>
+          `;
         }
+
+        modalBody.innerHTML = `
+          ${eventsHtml}
+          <div style="border-top: 1px solid var(--border-color); padding-top: 12px;">
+            <button class="btn btn-primary" id="btn-modal-add-agenda-here" style="width: 100%; font-size: 0.82rem; font-weight: 700;">
+              ➕ Tambah Catatan / Agenda untuk Tanggal Ini
+            </button>
+          </div>
+        `;
+
+        dashModal.style.display = 'flex';
+
+        // Add note for this date
+        const addBtn = document.getElementById('btn-modal-add-agenda-here');
+        if (addBtn) {
+          addBtn.addEventListener('click', () => {
+            renderAddEventForm(day, dashModal, modalTitle, modalBody, state, onNavigate);
+          });
+        }
+
+        // Delete custom events
+        const deleteBtns = modalBody.querySelectorAll('.btn-delete-custom-evt');
+        deleteBtns.forEach(dBtn => {
+          dBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deleteCustomCalendarEvent(dBtn.dataset.id);
+            showToast('Agenda kustom berhasil dihapus!', 'info');
+            dashModal.style.display = 'none';
+          });
+        });
       });
     });
   }
 }
 
-function showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate) {
+function renderAddEventForm(selectedDay, dashModal, modalTitle, modalBody, state, onNavigate) {
+  modalTitle.textContent = `➕ Tambah Agenda (${selectedDay} Agustus 2026)`;
+  modalBody.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div class="form-group">
+        <label class="form-label" style="font-size: 0.78rem;">Judul Agenda / Rapat / Catatan</label>
+        <input type="text" class="form-control" id="custom-evt-title" placeholder="cth: Meeting Supplier Biji Kopi Toraja" style="font-size: 0.82rem;">
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label" style="font-size: 0.78rem;">Kategori</label>
+          <select class="form-control" id="custom-evt-cat" style="font-size: 0.82rem;">
+            <option value="Tugas">🎯 Tugas Operasional</option>
+            <option value="Marketing">📢 Pemasaran & Promo</option>
+            <option value="Stok">📦 Pengadaan / Stok</option>
+            <option value="Catatan" selected>📝 Catatan Bisnis Mandiri</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="font-size: 0.78rem;">Waktu / Jam</label>
+          <input type="text" class="form-control" id="custom-evt-time" value="10:00 WIB" style="font-size: 0.82rem;">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" style="font-size: 0.78rem;">Catatan Tambahan & Detail</label>
+        <textarea class="form-control" id="custom-evt-notes" rows="2" placeholder="Tuliskan catatan penting agenda..." style="font-size: 0.82rem;"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 6px;">
+        <button class="btn btn-secondary btn-sm" id="btn-cancel-custom-evt">Batal</button>
+        <button class="btn btn-primary btn-sm" id="btn-save-custom-evt" style="font-weight: 700; padding: 8px 16px;">
+          💾 Simpan Agenda
+        </button>
+      </div>
+    </div>
+  `;
+
+  const cancelBtn = document.getElementById('btn-cancel-custom-evt');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      dashModal.style.display = 'none';
+    });
+  }
+
+  const saveBtn = document.getElementById('btn-save-custom-evt');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const title = document.getElementById('custom-evt-title').value.trim();
+      const category = document.getElementById('custom-evt-cat').value;
+      const time = document.getElementById('custom-evt-time').value.trim();
+      const notes = document.getElementById('custom-evt-notes').value.trim();
+
+      if (!title) {
+        showToast('Mohon masukkan judul agenda!', 'warning');
+        return;
+      }
+
+      const formattedDay = selectedDay < 10 ? `0${selectedDay}` : selectedDay;
+      const dateStr = `2026-08-${formattedDay}`;
+
+      addCustomCalendarEvent({
+        date: dateStr,
+        title,
+        category,
+        time,
+        notes
+      });
+
+      showToast(`Agenda "${title}" berhasil disimpan di kalender!`, 'success');
+      dashModal.style.display = 'none';
+    });
+  }
+}
+
+function showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate, state) {
   let badgeColor = 'var(--primary)';
   let targetScreen = 'action';
   let buttonLabel = 'Lihat di Action Center ➔';
@@ -680,6 +968,9 @@ function showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate) 
     badgeColor = '#f59e0b';
     targetScreen = 'action';
     buttonLabel = 'Buka Tugas Reorder di Action Center ➔';
+  } else if (ev.type === 'custom') {
+    badgeColor = '#06b6d4';
+    buttonLabel = 'Tutup';
   }
 
   modalTitle.textContent = ev.title;
@@ -698,9 +989,16 @@ function showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate) 
       <span>Prioritas: <strong>${ev.priority}</strong></span>
       <span>Dampak Target: <strong>Tinggi</strong></span>
     </div>
-    <button class="btn btn-primary" id="btn-modal-cal-goto" style="width: 100%; margin-top: 8px;">
-      ${buttonLabel}
-    </button>
+    ${ev.isCustom ? `
+      <div style="display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;">
+        <button class="btn btn-secondary btn-delete-custom-evt-single" data-id="${ev.id}" style="color: var(--danger);">🗑️ Hapus Agenda</button>
+        <button class="btn btn-primary" id="btn-modal-cal-close">Tutup</button>
+      </div>
+    ` : `
+      <button class="btn btn-primary" id="btn-modal-cal-goto" style="width: 100%; margin-top: 8px;">
+        ${buttonLabel}
+      </button>
+    `}
   `;
 
   dashModal.style.display = 'flex';
@@ -710,6 +1008,22 @@ function showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate) 
     gotoBtn.addEventListener('click', () => {
       dashModal.style.display = 'none';
       onNavigate(targetScreen);
+    });
+  }
+
+  const closeBtn = document.getElementById('btn-modal-cal-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      dashModal.style.display = 'none';
+    });
+  }
+
+  const delSingleBtn = modalBody.querySelector('.btn-delete-custom-evt-single');
+  if (delSingleBtn) {
+    delSingleBtn.addEventListener('click', () => {
+      deleteCustomCalendarEvent(delSingleBtn.dataset.id);
+      showToast('Agenda berhasil dihapus!', 'info');
+      dashModal.style.display = 'none';
     });
   }
 }
