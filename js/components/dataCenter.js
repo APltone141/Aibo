@@ -90,7 +90,7 @@ export function renderDataCenter(container, state, onNavigate) {
 
   function updateView() {
     container.innerHTML = `
-      <div class="animate-fade-in data-center-root" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+      <div class="animate-fade-in data-center-root data-center-grid">
         
         <!-- Left Column: Guidance, Upload Center & Recommended Next Data -->
         <div style="display: flex; flex-direction: column; gap: 20px;">

@@ -203,7 +203,7 @@ export function renderDashboard(container, state, onNavigate) {
       </div>
 
       <!-- Core KPI Dashboard Grid -->
-      <div class="grid-4">
+      <div class="kpi-grid-container">
         
         <!-- Revenue KPI -->
         <div class="card kpi-card clickable-kpi" data-kpi="revenue" style="cursor: pointer;" title="Klik untuk detail breakdown omset">
@@ -318,7 +318,7 @@ export function renderDashboard(container, state, onNavigate) {
       </div>
 
       <!-- Split 2-Column: Key Recommendations & Pending Tasks -->
-      <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; align-items: start;">
+      <div class="dashboard-hero-grid" style="align-items: start;">
         
         <!-- Left: AI Recommendations List -->
         <div class="card animate-fade-in">

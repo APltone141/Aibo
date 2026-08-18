@@ -115,7 +115,7 @@ export function renderDecision(container, state, onNavigate) {
         </div>
 
         <!-- Main 2-Column Grid -->
-        <div style="display: grid; grid-template-columns: 1.45fr 1fr; gap: 20px;">
+        <div class="dashboard-hero-grid" style="gap: 20px;">
           
           <!-- Left Column: Decision Optimization Panel with Multi-Choice Options -->
           <div style="display: flex; flex-direction: column; gap: 16px;">
@@ -164,7 +164,7 @@ export function renderDecision(container, state, onNavigate) {
                           ${getIcon('option', { size: 14 })} <span>Pilih Skenario Alokasi Keputusan:</span>
                         </span>
                         
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                        <div class="scenario-options-grid" style="gap: 8px;">
                           ${optionsData.map(opt => {
                             const isChecked = opt.id === selectedOpt;
                             return `

@@ -228,8 +228,8 @@ function renderAppShell(state) {
           
           <div class="page-actions" style="display: flex; align-items: center; gap: 12px;">
             <!-- Help / Product Tour Button -->
-            <button class="btn btn-secondary btn-sm" id="btn-launch-tour-header" style="font-size: 0.78rem; padding: 5px 10px; display: flex; align-items: center; gap: 6px;">
-              ${getIcon('tour', { size: 16 })}<span>Tur Produk</span>
+            <button class="btn btn-secondary btn-sm aibo-icon-btn" id="btn-launch-tour-header" style="font-size: 0.78rem; padding: 6px 10px;" title="Buka Tur Produk">
+              ${getIcon('tour', { size: 16 })}<span class="header-btn-text">Tur Produk</span>
             </button>
 
             <!-- Notification Bell count indicator -->

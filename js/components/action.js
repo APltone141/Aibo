@@ -140,20 +140,20 @@ export function renderAction(container, state, onNavigate) {
         
         <!-- Sub Navigation Tabs -->
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap; gap: 12px;">
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="btn ${activeTab === 'tasks' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="tasks" style="padding: 8px 14px; font-size: 0.82rem;">
+          <div class="horizontal-scroll-tabs" style="display: flex; gap: 8px;">
+            <button class="btn ${activeTab === 'tasks' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="tasks" style="padding: 8px 14px; font-size: 0.82rem; white-space: nowrap; flex-shrink: 0;">
               ${getIcon('task', { size: 16 })} <span>Checklist Tugas (${tasks.filter(t => t.status !== 'completed').length})</span>
             </button>
-            <button class="btn ${activeTab === 'goals' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="goals" style="padding: 8px 14px; font-size: 0.82rem;">
+            <button class="btn ${activeTab === 'goals' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="goals" style="padding: 8px 14px; font-size: 0.82rem; white-space: nowrap; flex-shrink: 0;">
               ${getIcon('goals', { size: 16 })} <span>Target Goals & Drivers (${goals.length})</span>
             </button>
-            <button class="btn ${activeTab === 'approvals' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="approvals" style="padding: 8px 14px; font-size: 0.82rem;">
+            <button class="btn ${activeTab === 'approvals' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="approvals" style="padding: 8px 14px; font-size: 0.82rem; white-space: nowrap; flex-shrink: 0;">
               ${getIcon('approvals', { size: 16 })} <span>Persetujuan Tim</span> ${pendingApprCount > 0 ? `<span class="badge badge-high" style="font-size: 0.65rem; margin-left: 4px;">${pendingApprCount}</span>` : ''}
             </button>
-            <button class="btn ${activeTab === 'notifications' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="notifications" style="padding: 8px 14px; font-size: 0.82rem;">
+            <button class="btn ${activeTab === 'notifications' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="notifications" style="padding: 8px 14px; font-size: 0.82rem; white-space: nowrap; flex-shrink: 0;">
               ${getIcon('bell', { size: 16 })} <span>Notifikasi (${notifications.filter(n => !n.read).length})</span>
             </button>
-            <button class="btn ${activeTab === 'reports' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="reports" style="padding: 8px 14px; font-size: 0.82rem;">
+            <button class="btn ${activeTab === 'reports' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="reports" style="padding: 8px 14px; font-size: 0.82rem; white-space: nowrap; flex-shrink: 0;">
               ${getIcon('reports', { size: 16 })} <span>Pusat Laporan Bisnis</span>
             </button>
           </div>
@@ -494,20 +494,20 @@ export function renderAction(container, state, onNavigate) {
     const completed = tasks.filter(t => t.status === 'completed');
 
     return `
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-        <div class="card" style="padding: 14px;">
+      <div class="kanban-board-scroll">
+        <div class="card kanban-column" style="padding: 14px;">
           <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px; color: var(--warning); display: flex; align-items: center; gap: 6px;">${getIcon('pending', { size: 14 })} <span>Belum Dimulai (${todo.length})</span></div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             ${todo.map(t => renderKanbanCard(t)).join('')}
           </div>
         </div>
-        <div class="card" style="padding: 14px;">
+        <div class="card kanban-column" style="padding: 14px;">
           <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px; color: var(--ai-primary); display: flex; align-items: center; gap: 6px;">${getIcon('recommendation', { size: 14 })} <span>Sedang Berjalan (${inProgress.length})</span></div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             ${inProgress.map(t => renderKanbanCard(t)).join('')}
           </div>
         </div>
-        <div class="card" style="padding: 14px;">
+        <div class="card kanban-column" style="padding: 14px;">
           <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px; color: var(--success); display: flex; align-items: center; gap: 6px;">${getIcon('check-circle', { size: 14 })} <span>Selesai (${completed.length})</span></div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             ${completed.map(t => renderKanbanCard(t)).join('')}

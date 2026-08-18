@@ -36,14 +36,14 @@ export function renderProfile(container, state, onNavigate) {
         
         <!-- Top Sub Navigation Tabs -->
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap; gap: 12px;">
-          <div style="display: flex; gap: 8px;">
-            <button class="btn ${activeTab === 'profile' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="profile" style="padding: 8px 16px; font-size: 0.84rem;">
+          <div class="horizontal-scroll-tabs" style="display: flex; gap: 8px;">
+            <button class="btn ${activeTab === 'profile' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="profile" style="padding: 8px 16px; font-size: 0.84rem; white-space: nowrap; flex-shrink: 0;">
               ${getIcon('profile', { size: 16 })} <span>Profil & Identitas Bisnis</span>
             </button>
-            <button class="btn ${activeTab === 'billing' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="billing" style="padding: 8px 16px; font-size: 0.84rem;">
+            <button class="btn ${activeTab === 'billing' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="billing" style="padding: 8px 16px; font-size: 0.84rem; white-space: nowrap; flex-shrink: 0;">
               ${getIcon('billing', { size: 16 })} <span>Paket Langganan & Kuota (${sub.plan})</span>
             </button>
-            <button class="btn ${activeTab === 'team' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="team" style="padding: 8px 16px; font-size: 0.84rem;">
+            <button class="btn ${activeTab === 'team' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="team" style="padding: 8px 16px; font-size: 0.84rem; white-space: nowrap; flex-shrink: 0;">
               ${getIcon('team', { size: 16 })} <span>Tim & Hak Akses</span>
             </button>
           </div>
@@ -232,7 +232,7 @@ export function renderProfile(container, state, onNavigate) {
             `}
           </div>
           <!-- Quota Progress Bars -->
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+          <div class="pricing-tiers-grid" style="gap: 14px; padding-top: 14px; border-top: 1px solid var(--border-color);">
             
             <!-- AI Prompts Quota -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
@@ -295,7 +295,7 @@ export function renderProfile(container, state, onNavigate) {
           </div>
 
           <!-- 3-Tier Grid -->
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+          <div class="pricing-tiers-grid" style="gap: 16px;">
             
             <!-- Tier 1: Starter -->
             <div class="card" style="background: var(--bg-primary); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between; padding: 18px;">
