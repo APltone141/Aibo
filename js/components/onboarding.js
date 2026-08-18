@@ -4,6 +4,7 @@
 
 import { completeOnboarding } from '../state.js';
 import { showToast } from '../utils.js';
+import { getIcon } from '../icons.js';
 
 export function renderOnboarding(container, state, onNavigate) {
   let step = state.onboardingStep || 1;
@@ -54,14 +55,14 @@ export function renderOnboarding(container, state, onNavigate) {
           </div>
           
           <div class="wizard-footer" style="display: flex; justify-content: space-between; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-color);">
-            ${step > 1 && step < 6 ? `<button class="btn btn-secondary" id="btn-back">← Kembali</button>` : '<div></div>'}
+            ${step > 1 && step < 6 ? `<button class="btn btn-secondary aibo-icon-btn" id="btn-back">${getIcon('arrow-left', { size: 14 })} <span>Kembali</span></button>` : '<div></div>'}
             ${step < 6 ? `
-              <button class="btn btn-primary" id="btn-next" style="padding: 10px 24px; font-weight: 700;">
-                ${step === 5 ? 'Proses Validation Data' : 'Lanjutkan →'}
+              <button class="btn btn-primary aibo-icon-btn" id="btn-next" style="padding: 10px 24px; font-weight: 700;">
+                <span>${step === 5 ? 'Proses Validasi Data' : 'Lanjutkan'}</span> ${getIcon('arrow-right', { size: 14 })}
               </button>
             ` : `
-              <button class="btn btn-ai" id="btn-finish" style="width: 100%; padding: 14px; font-weight: 700; font-size: 1rem;">
-                🚀 Masuk ke Dashboard Executive AIbo
+              <button class="btn btn-ai aibo-icon-btn" id="btn-finish" style="width: 100%; padding: 14px; font-weight: 700; font-size: 1rem; justify-content: center;">
+                ${getIcon('recommendation', { size: 18 })} <span>Masuk ke Dashboard Eksekutif AIbo</span>
               </button>
             `}
           </div>
@@ -77,13 +78,14 @@ export function renderOnboarding(container, state, onNavigate) {
       case 1:
         return `
           <div style="text-align: center; padding: 20px 0; display: flex; flex-direction: column; gap: 16px; align-items: center;">
-            <div style="font-size: 3rem; width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--ai-primary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; box-shadow: var(--shadow-md);">👋</div>
+            <img src="./Asset/aibo logo.png" alt="AIbo Logo" style="height: 72px; max-width: 220px; object-fit: contain; margin-bottom: 4px;" />
             <h3 style="font-size: 1.5rem; font-weight: 700;">Selamat Datang di AIbo!</h3>
             <p style="color: var(--text-secondary); max-width: 480px; font-size: 0.92rem; line-height: 1.6;">
               AI Business Companion yang membantu Anda memahami <strong>apa yang terjadi</strong>, <strong>mengapa terjadi</strong>, dan <strong>langkah konkret apa yang harus dilakukan</strong> untuk memajukan bisnis Anda.
             </p>
-            <div style="background: var(--bg-primary); padding: 14px 20px; border-radius: var(--radius-sm); border-left: 4px solid var(--primary); text-align: left; font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">
-              💡 <em>Tidak memerlukan keahlian analisis data enterprise. AIbo dirancang khusus untuk pemilik usaha dan manajer operasional.</em>
+            <div style="background: var(--bg-primary); padding: 14px 20px; border-radius: var(--radius-sm); border-left: 4px solid var(--primary); text-align: left; font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px; display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: var(--primary);">${getIcon('insight', { size: 18 })}</span>
+              <em>Tidak memerlukan keahlian analisis data enterprise. AIbo dirancang khusus untuk pemilik usaha dan manajer operasional.</em>
             </div>
           </div>
         `;
@@ -92,16 +94,16 @@ export function renderOnboarding(container, state, onNavigate) {
           <div style="display: flex; flex-direction: column; gap: 20px;">
             <div>
               <h3 style="font-size: 1.3rem; font-weight: 700;">Peran & Undang Anggota Tim</h3>
-              <p style="color: var(--text-secondary); font-size: 0.88rem;">Pilih peran utama Anda dan optionally undang staf/manajer ke AIbo.</p>
+              <p style="color: var(--text-secondary); font-size: 0.88rem;">Pilih peran utama Anda dan undang staf/manajer ke AIbo.</p>
             </div>
 
             <div class="form-group">
               <label class="form-label" style="font-weight: 600;">Peran Utama Anda</label>
               <div class="selection-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                <div class="select-card ${onboardingData.role === 'Owner' ? 'selected' : ''}" data-role="Owner" style="padding: 14px; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer;">👨‍💼 Pemilik (Owner)</div>
-                <div class="select-card ${onboardingData.role === 'Manager' ? 'selected' : ''}" data-role="Manager" style="padding: 14px; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer;">👩‍💼 Manajer Operasional</div>
-                <div class="select-card ${onboardingData.role === 'Finance' ? 'selected' : ''}" data-role="Finance" style="padding: 14px; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer;">📊 Keuangan (Finance)</div>
-                <div class="select-card ${onboardingData.role === 'Marketing' ? 'selected' : ''}" data-role="Marketing" style="padding: 14px; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer;">📣 Pemasaran (Marketing)</div>
+                <div class="select-card ${onboardingData.role === 'Owner' ? 'selected' : ''}" data-role="Owner" style="padding: 14px; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">${getIcon('profile', { size: 16 })} Pemilik (Owner)</div>
+                <div class="select-card ${onboardingData.role === 'Manager' ? 'selected' : ''}" data-role="Manager" style="padding: 14px; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">${getIcon('team', { size: 16 })} Manajer Operasional</div>
+                <div class="select-card ${onboardingData.role === 'Finance' ? 'selected' : ''}" data-role="Finance" style="padding: 14px; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">${getIcon('revenue', { size: 16 })} Keuangan (Finance)</div>
+                <div class="select-card ${onboardingData.role === 'Marketing' ? 'selected' : ''}" data-role="Marketing" style="padding: 14px; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">${getIcon('marketing', { size: 16 })} Pemasaran (Marketing)</div>
               </div>
             </div>
 

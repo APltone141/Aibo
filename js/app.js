@@ -2,6 +2,7 @@
 // Main entrypoint, routing system, UI shell coordinator, and prototype simulation panel.
 
 import { initState, appState, registerChangeListener, resetState, saveState } from './state.js';
+import { getIcon } from './icons.js';
 import { renderDashboard } from './components/dashboard.js';
 import { renderAnalytics } from './components/analytics.js';
 import { renderDecision } from './components/decision.js';
@@ -58,7 +59,7 @@ function toggleTheme() {
   // Update toggle button icon
   const toggleBtn = document.getElementById('theme-toggle-btn');
   if (toggleBtn) {
-    toggleBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    toggleBtn.innerHTML = next === 'dark' ? getIcon('sun', { size: 18 }) : getIcon('moon', { size: 18 });
   }
 }
 
@@ -127,36 +128,35 @@ function renderAppShell(state) {
       <aside class="sidebar ${isCollapsed ? 'collapsed' : ''}" id="main-sidebar">
         <div class="sidebar-logo">
           <div class="logo-brand">
-            <div class="logo-icon">A</div>
-            <span class="logo-text">AIbo</span>
+            <img src="./Asset/aibo logo.png" alt="AIbo Logo" class="sidebar-logo-img" />
           </div>
           <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Toggle Sidebar">
-            ${isCollapsed ? '▶' : '◀'}
+            ${isCollapsed ? getIcon('chevron-right', { size: 16 }) : getIcon('chevron-left', { size: 16 })}
           </button>
         </div>
         <nav class="sidebar-nav">
           <a class="nav-item ${currentScreen === 'dashboard' ? 'active' : ''}" data-screen="dashboard" id="nav-dashboard" title="Dashboard">
-            <span class="nav-icon">📊</span>
+            <span class="nav-icon">${getIcon('dashboard', { size: 18 })}</span>
             <span class="nav-text">Dashboard</span>
           </a>
           <a class="nav-item ${currentScreen === 'analytics' ? 'active' : ''}" data-screen="analytics" id="nav-analytics" title="Analytics">
-            <span class="nav-icon">📈</span>
+            <span class="nav-icon">${getIcon('analytics', { size: 18 })}</span>
             <span class="nav-text">Analytics</span>
           </a>
           <a class="nav-item ${currentScreen === 'decision' ? 'active' : ''}" data-screen="decision" id="nav-decision" title="Decision Center">
-            <span class="nav-icon">💡</span>
+            <span class="nav-icon">${getIcon('decision', { size: 18 })}</span>
             <span class="nav-text">Decision Center</span>
           </a>
           <a class="nav-item ${currentScreen === 'action' ? 'active' : ''}" data-screen="action" id="nav-action" title="Action Center">
-            <span class="nav-icon">🎯</span>
+            <span class="nav-icon">${getIcon('action', { size: 18 })}</span>
             <span class="nav-text">Action Center</span>
           </a>
           <a class="nav-item ${currentScreen === 'data' ? 'active' : ''}" data-screen="data" id="nav-data" title="Data Center">
-            <span class="nav-icon">📁</span>
+            <span class="nav-icon">${getIcon('data-center', { size: 18 })}</span>
             <span class="nav-text">Data Center</span>
           </a>
           <a class="nav-item ${currentScreen === 'profile' ? 'active' : ''}" data-screen="profile" id="nav-profile" title="Settings">
-            <span class="nav-icon">⚙️</span>
+            <span class="nav-icon">${getIcon('profile', { size: 18 })}</span>
             <span class="nav-text">Settings</span>
           </a>
         </nav>
@@ -169,8 +169,8 @@ function renderAppShell(state) {
               <span class="user-role">${state.user.role}</span>
             </div>
           </div>
-          <button id="btn-logout-sidebar" style="background: none; border: none; cursor: pointer; font-size: 1.15rem; opacity: 0.75; transition: opacity 0.2s; padding: 4px;" title="Keluar (Logout)">
-            🚪
+          <button id="btn-logout-sidebar" style="background: none; border: none; cursor: pointer; color: var(--text-muted); transition: color 0.2s; padding: 4px; display: flex; align-items: center;" title="Keluar (Logout)">
+            ${getIcon('logout', { size: 18 })}
           </button>
         </div>
       </aside>
@@ -178,19 +178,19 @@ function renderAppShell(state) {
       <!-- MOBILE BOTTOM NAVBAR (4 Primary + More) -->
       <div class="mobile-nav-bar">
         <a class="mobile-nav-item ${currentScreen === 'dashboard' ? 'active' : ''}" data-screen="dashboard">
-          <span>📊</span><span>Dash</span>
+          <span>${getIcon('dashboard', { size: 20 })}</span><span>Dash</span>
         </a>
         <a class="mobile-nav-item ${currentScreen === 'analytics' ? 'active' : ''}" data-screen="analytics">
-          <span>📈</span><span>Analytics</span>
+          <span>${getIcon('analytics', { size: 20 })}</span><span>Analytics</span>
         </a>
         <a class="mobile-nav-item ${currentScreen === 'decision' ? 'active' : ''}" data-screen="decision">
-          <span>💡</span><span>Decision</span>
+          <span>${getIcon('decision', { size: 20 })}</span><span>Decision</span>
         </a>
         <a class="mobile-nav-item ${currentScreen === 'action' ? 'active' : ''}" data-screen="action">
-          <span>🎯</span><span>Action</span>
+          <span>${getIcon('action', { size: 20 })}</span><span>Action</span>
         </a>
         <a class="mobile-nav-item" id="mobile-more-btn" style="cursor: pointer;">
-          <span>⚡</span><span>More</span>
+          <span>${getIcon('more', { size: 20 })}</span><span>Menu</span>
         </a>
       </div>
 
@@ -199,19 +199,19 @@ function renderAppShell(state) {
         <div class="mobile-more-sheet">
           <div class="mobile-more-header">
             <span>Menu Navigasi Tambahan</span>
-            <button class="mobile-more-close" id="mobile-more-close-btn">&times;</button>
+            <button class="mobile-more-close" id="mobile-more-close-btn">${getIcon('close', { size: 18 })}</button>
           </div>
           <a class="mobile-more-item" data-screen="data">
-            <span>📁</span><span>Data Center</span>
+            <span>${getIcon('data-center', { size: 20 })}</span><span>Data Center</span>
           </a>
           <a class="mobile-more-item" data-screen="profile">
-            <span>⚙️</span><span>Settings & Profile</span>
+            <span>${getIcon('profile', { size: 20 })}</span><span>Settings & Profile</span>
           </a>
           <a class="mobile-more-item" id="mobile-more-notif-btn">
-            <span>🔔</span><span>Notifications (${state.notifications.filter(n => !n.read).length})</span>
+            <span>${getIcon('notification', { size: 20 })}</span><span>Notifikasi (${state.notifications.filter(n => !n.read).length})</span>
           </a>
           <a class="mobile-more-item" id="mobile-more-logout-btn" style="border-top: 1px solid var(--border-color); margin-top: 8px; color: var(--danger);">
-            <span>🚪</span><span>Keluar (Logout)</span>
+            <span>${getIcon('logout', { size: 20 })}</span><span>Keluar (Logout)</span>
           </a>
         </div>
       </div>
@@ -228,21 +228,21 @@ function renderAppShell(state) {
           
           <div class="page-actions" style="display: flex; align-items: center; gap: 12px;">
             <!-- Help / Product Tour Button -->
-            <button class="btn btn-secondary btn-sm" id="btn-launch-tour-header" style="font-size: 0.78rem; padding: 5px 10px; display: flex; align-items: center; gap: 4px;">
-              <span>❓</span><span>Tur Produk</span>
+            <button class="btn btn-secondary btn-sm" id="btn-launch-tour-header" style="font-size: 0.78rem; padding: 5px 10px; display: flex; align-items: center; gap: 6px;">
+              ${getIcon('tour', { size: 16 })}<span>Tur Produk</span>
             </button>
 
             <!-- Notification Bell count indicator -->
-            <div style="position: relative; cursor: pointer;" id="header-notif-btn">
-              <span style="font-size: 1.25rem;">🔔</span>
-              <span id="unread-notif-badge" style="position: absolute; top: -4px; right: -4px; background-color: var(--danger); color: white; border-radius: 50%; font-size: 0.65rem; width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+            <div style="position: relative; cursor: pointer; display: flex; align-items: center;" id="header-notif-btn" title="Notifikasi">
+              ${getIcon('notification', { size: 20 })}
+              <span id="unread-notif-badge" style="position: absolute; top: -6px; right: -6px; background-color: var(--danger); color: white; border-radius: 50%; font-size: 0.65rem; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
                 ${state.notifications.filter(n => !n.read).length}
               </span>
             </div>
             
             <!-- Light/Dark Toggle -->
-            <button class="theme-switch" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
-              ${activeTheme === 'dark' ? '☀️' : '🌙'}
+            <button class="theme-switch" id="theme-toggle-btn" title="Toggle Light/Dark Theme" style="display: flex; align-items: center; justify-content: center;">
+              ${activeTheme === 'dark' ? getIcon('sun', { size: 18 }) : getIcon('moon', { size: 18 })}
             </button>
           </div>
         </header>
@@ -309,7 +309,7 @@ function bindShellEvents() {
 
       const isNowCollapsed = sidebar.classList.toggle('collapsed');
       mainContent.classList.toggle('sidebar-collapsed', isNowCollapsed);
-      toggleSidebarBtn.textContent = isNowCollapsed ? '▶' : '◀';
+      toggleSidebarBtn.innerHTML = isNowCollapsed ? getIcon('chevron-right', { size: 16 }) : getIcon('chevron-left', { size: 16 });
       localStorage.setItem('aibo_sidebar_collapsed', isNowCollapsed);
     });
   }
@@ -429,7 +429,7 @@ function updateGlobalHeaderMetrics(state) {
   }
 }
 
-// Special Prototype Control Panel (Reviews Sandbox switcher - Minimized by Default)
+// Special Prototype Control Panel (Reviewer Sandbox switcher - Minimized by Default)
 function initPrototypeController() {
   if (document.getElementById('prototype-helper-box')) return;
 
@@ -453,15 +453,15 @@ function initPrototypeController() {
   `;
   
   controller.innerHTML = `
-    <button id="btn-toggle-sandbox" style="background: none; border: none; cursor: pointer; color: var(--primary); font-weight: bold; font-size: 0.9rem;" title="Buka Reviewer Sandbox Panel">
-      🔧 Sandbox
+    <button id="btn-toggle-sandbox" style="background: none; border: none; cursor: pointer; color: var(--primary); font-weight: bold; font-size: 0.82rem; display: flex; align-items: center; gap: 6px;" title="Buka Reviewer Sandbox Panel">
+      ${getIcon('settings', { size: 16 })} <span>Sandbox</span>
     </button>
     <div id="sandbox-expanded-content" style="display: none; align-items: center; gap: 8px; border-left: 1px solid var(--border-color); padding-left: 8px;">
       <select id="prototype-state-dropdown" style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 4px; border-radius: 4px; font-size: 0.75rem;">
         <option value="returning" ${appState?.onboardingCompleted ? 'selected' : ''}>Pemilik Kembali (Ardi P.)</option>
         <option value="new" ${!appState?.onboardingCompleted ? 'selected' : ''}>Onboarding Pengguna Baru</option>
       </select>
-      <button id="btn-sandbox-reset" style="background: none; border: none; cursor: pointer; color: var(--text-muted);" title="Reset local storage state">🔄</button>
+      <button id="btn-sandbox-reset" style="background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center;" title="Reset data aplikasi ke kondisi awal">${getIcon('refresh', { size: 15 })}</button>
     </div>
   `;
   
@@ -501,7 +501,7 @@ function initPrototypeController() {
   const resetBtn = document.getElementById('btn-sandbox-reset');
   if (resetBtn) {
     resetBtn.addEventListener('click', async () => {
-      const confirmReset = confirm("Reset state localStorage ke data dummy awal?");
+      const confirmReset = confirm("Reset state data ke kondisi awal?");
       if (confirmReset) {
         document.getElementById('app-root').innerHTML = '';
         const state = await resetState();

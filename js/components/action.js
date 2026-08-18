@@ -6,6 +6,7 @@
 
 import { formatCurrency, formatPercent, formatNumber, showToast } from '../utils.js';
 import { completeTask, addTask, applyRecommendation, respondApprovalRequest } from '../state.js';
+import { getIcon } from '../icons.js';
 
 export function renderAction(container, state, onNavigate) {
   let activeTab = 'tasks'; // 'tasks', 'goals', 'approvals', 'notifications', 'reports'
@@ -140,27 +141,27 @@ export function renderAction(container, state, onNavigate) {
         <!-- Sub Navigation Tabs -->
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap; gap: 12px;">
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="btn ${activeTab === 'tasks' ? 'btn-primary' : 'btn-secondary'}" data-tab="tasks" style="padding: 8px 14px; font-size: 0.82rem;">
-              📋 Checklist Tugas (${tasks.filter(t => t.status !== 'completed').length})
+            <button class="btn ${activeTab === 'tasks' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="tasks" style="padding: 8px 14px; font-size: 0.82rem;">
+              ${getIcon('task', { size: 16 })} <span>Checklist Tugas (${tasks.filter(t => t.status !== 'completed').length})</span>
             </button>
-            <button class="btn ${activeTab === 'goals' ? 'btn-primary' : 'btn-secondary'}" data-tab="goals" style="padding: 8px 14px; font-size: 0.82rem;">
-              🎯 Target Goals & Drivers (${goals.length})
+            <button class="btn ${activeTab === 'goals' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="goals" style="padding: 8px 14px; font-size: 0.82rem;">
+              ${getIcon('goals', { size: 16 })} <span>Target Goals & Drivers (${goals.length})</span>
             </button>
-            <button class="btn ${activeTab === 'approvals' ? 'btn-primary' : 'btn-secondary'}" data-tab="approvals" style="padding: 8px 14px; font-size: 0.82rem;">
-              ⏳ Persetujuan Tim ${pendingApprCount > 0 ? `<span class="badge badge-high" style="font-size: 0.65rem; margin-left: 4px;">${pendingApprCount}</span>` : ''}
+            <button class="btn ${activeTab === 'approvals' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="approvals" style="padding: 8px 14px; font-size: 0.82rem;">
+              ${getIcon('approvals', { size: 16 })} <span>Persetujuan Tim</span> ${pendingApprCount > 0 ? `<span class="badge badge-high" style="font-size: 0.65rem; margin-left: 4px;">${pendingApprCount}</span>` : ''}
             </button>
-            <button class="btn ${activeTab === 'notifications' ? 'btn-primary' : 'btn-secondary'}" data-tab="notifications" style="padding: 8px 14px; font-size: 0.82rem;">
-              🔔 Notifikasi (${notifications.filter(n => !n.read).length})
+            <button class="btn ${activeTab === 'notifications' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="notifications" style="padding: 8px 14px; font-size: 0.82rem;">
+              ${getIcon('bell', { size: 16 })} <span>Notifikasi (${notifications.filter(n => !n.read).length})</span>
             </button>
-            <button class="btn ${activeTab === 'reports' ? 'btn-primary' : 'btn-secondary'}" data-tab="reports" style="padding: 8px 14px; font-size: 0.82rem;">
-              📑 Pusat Laporan Bisnis
+            <button class="btn ${activeTab === 'reports' ? 'btn-primary' : 'btn-secondary'} aibo-icon-btn" data-tab="reports" style="padding: 8px 14px; font-size: 0.82rem;">
+              ${getIcon('reports', { size: 16 })} <span>Pusat Laporan Bisnis</span>
             </button>
           </div>
 
           ${activeTab === 'tasks' ? `
             <div style="display: flex; gap: 6px;">
-              <button class="btn btn-secondary btn-sm ${taskViewMode === 'list' ? 'btn-primary' : ''}" id="btn-view-list" style="padding: 6px 12px; font-size: 0.78rem;">Tampilan List</button>
-              <button class="btn btn-secondary btn-sm ${taskViewMode === 'kanban' ? 'btn-primary' : ''}" id="btn-view-kanban" style="padding: 6px 12px; font-size: 0.78rem;">Kanban Board</button>
+              <button class="btn btn-secondary btn-sm aibo-icon-btn ${taskViewMode === 'list' ? 'btn-primary' : ''}" id="btn-view-list" style="padding: 6px 12px; font-size: 0.78rem;">${getIcon('task', { size: 14 })} <span>List</span></button>
+              <button class="btn btn-secondary btn-sm aibo-icon-btn ${taskViewMode === 'kanban' ? 'btn-primary' : ''}" id="btn-view-kanban" style="padding: 6px 12px; font-size: 0.78rem;">${getIcon('kanban', { size: 14 })} <span>Kanban</span></button>
             </div>
           ` : ''}
         </div>
@@ -425,10 +426,10 @@ export function renderAction(container, state, onNavigate) {
                 </div>
                 <div style="display: flex; gap: 6px;" id="report-filter-buttons">
                   <button class="btn btn-sm ${reportCategoryFilter === 'all' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep" data-cat="all" style="font-size: 0.75rem;">Semua</button>
-                  <button class="btn btn-sm ${reportCategoryFilter === 'executive' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep" data-cat="executive" style="font-size: 0.75rem;">🏢 Eksekutif</button>
-                  <button class="btn btn-sm ${reportCategoryFilter === 'financial' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep" data-cat="financial" style="font-size: 0.75rem;">💰 Keuangan</button>
-                  <button class="btn btn-sm ${reportCategoryFilter === 'customer_ops' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep" data-cat="customer_ops" style="font-size: 0.75rem;">👥 Pelanggan & Ops</button>
-                  <button class="btn btn-sm ${reportCategoryFilter === 'marketing' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep" data-cat="marketing" style="font-size: 0.75rem;">📈 Pemasaran</button>
+                  <button class="btn btn-sm ${reportCategoryFilter === 'executive' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep aibo-icon-btn" data-cat="executive" style="font-size: 0.75rem;">${getIcon('health', { size: 13 })} <span>Eksekutif</span></button>
+                  <button class="btn btn-sm ${reportCategoryFilter === 'financial' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep aibo-icon-btn" data-cat="financial" style="font-size: 0.75rem;">${getIcon('revenue', { size: 13 })} <span>Keuangan</span></button>
+                  <button class="btn btn-sm ${reportCategoryFilter === 'customer_ops' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep aibo-icon-btn" data-cat="customer_ops" style="font-size: 0.75rem;">${getIcon('customer', { size: 13 })} <span>Pelanggan & Ops</span></button>
+                  <button class="btn btn-sm ${reportCategoryFilter === 'marketing' ? 'btn-primary' : 'btn-secondary'} btn-filter-rep aibo-icon-btn" data-cat="marketing" style="font-size: 0.75rem;">${getIcon('marketing', { size: 13 })} <span>Pemasaran</span></button>
                 </div>
               </div>
             </div>
@@ -445,9 +446,9 @@ export function renderAction(container, state, onNavigate) {
                     <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;">${rep.summary}</p>
                   </div>
                   <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.72rem; color: var(--ai-primary); font-weight: 600;">Terverifikasi AIbo</span>
-                    <button class="btn btn-primary btn-sm btn-open-report-preview" data-report-id="${rep.id}" style="font-size: 0.78rem; padding: 6px 14px;">
-                      📄 Pratinjau & Ekspor
+                    <span style="font-size: 0.72rem; color: var(--ai-primary); font-weight: 600; display: flex; align-items: center; gap: 4px;">${getIcon('check-circle', { size: 13 })} Terverifikasi AIbo</span>
+                    <button class="btn btn-primary btn-sm btn-open-report-preview aibo-icon-btn" data-report-id="${rep.id}" style="font-size: 0.78rem; padding: 6px 14px;">
+                      ${getIcon('reports', { size: 14 })} <span>Pratinjau & Ekspor</span>
                     </button>
                   </div>
                 </div>
@@ -467,16 +468,18 @@ export function renderAction(container, state, onNavigate) {
             const isDone = t.status === 'completed';
             return `
               <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--bg-primary); border-radius: var(--radius-sm); border: 1px solid var(--border-color); opacity: ${isDone ? 0.65 : 1};">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <button class="btn-check-task ${isDone ? 'checked' : ''}" data-task-id="${t.id}" style="width: 22px; height: 22px; border-radius: 4px; border: 2px solid ${isDone ? 'var(--success)' : 'var(--primary)'}; background: ${isDone ? 'var(--success)' : 'transparent'}; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                    ${isDone ? '✓' : ''}
+                <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                  <button class="btn-check-task" data-task-id="${t.id}" style="background: none; border: 2px solid ${isDone ? 'var(--success)' : 'var(--border-color)'}; width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--success); flex-shrink: 0;">
+                    ${isDone ? getIcon('check', { size: 14 }) : ''}
                   </button>
                   <div>
-                    <strong style="font-size: 0.88rem; color: var(--text-primary); text-decoration: ${isDone ? 'line-through' : 'none'}; display: block;">${t.title}</strong>
-                    <span style="font-size: 0.72rem; color: var(--text-muted);">PIC: ${t.assignee} • Tenggat: ${t.due_date} • Sumber: ${t.source || 'AI Recommendation'}</span>
+                    <span style="font-size: 0.88rem; font-weight: 600; color: ${isDone ? 'var(--text-muted)' : 'var(--text-primary)'}; text-decoration: ${isDone ? 'line-through' : 'none'}; display: block;">
+                      ${t.title}
+                    </span>
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">PIC: ${t.assignee} • Tenggat: ${t.due_date}</span>
                   </div>
                 </div>
-                <span class="badge ${t.priority === 'High' ? 'badge-high' : 'badge-medium'}">${t.priority}</span>
+                <span class="badge ${t.priority === 'High' ? 'badge-high' : 'badge-low'}" style="font-size: 0.65rem;">${t.priority}</span>
               </div>
             `;
           }).join('')}
@@ -486,26 +489,26 @@ export function renderAction(container, state, onNavigate) {
   }
 
   function renderTaskKanbanView(tasks) {
-    const todo = tasks.filter(t => t.status === 'todo');
+    const todo = tasks.filter(t => t.status === 'todo' || !t.status);
     const inProgress = tasks.filter(t => t.status === 'in_progress');
     const completed = tasks.filter(t => t.status === 'completed');
 
     return `
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
         <div class="card" style="padding: 14px;">
-          <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px;">📌 Belum Dikerjakan (${todo.length})</div>
+          <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px; color: var(--warning); display: flex; align-items: center; gap: 6px;">${getIcon('pending', { size: 14 })} <span>Belum Dimulai (${todo.length})</span></div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             ${todo.map(t => renderKanbanCard(t)).join('')}
           </div>
         </div>
         <div class="card" style="padding: 14px;">
-          <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px; color: var(--ai-primary);">⚡ Sedang Berjalan (${inProgress.length})</div>
+          <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px; color: var(--ai-primary); display: flex; align-items: center; gap: 6px;">${getIcon('recommendation', { size: 14 })} <span>Sedang Berjalan (${inProgress.length})</span></div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             ${inProgress.map(t => renderKanbanCard(t)).join('')}
           </div>
         </div>
         <div class="card" style="padding: 14px;">
-          <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px; color: var(--success);">✓ Selesai (${completed.length})</div>
+          <div class="card-title" style="font-size: 0.88rem; margin-bottom: 12px; color: var(--success); display: flex; align-items: center; gap: 6px;">${getIcon('check-circle', { size: 14 })} <span>Selesai (${completed.length})</span></div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             ${completed.map(t => renderKanbanCard(t)).join('')}
           </div>
@@ -541,10 +544,12 @@ export function renderAction(container, state, onNavigate) {
           
           <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
             <div>
-              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary);">${goal.name}</h3>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                ${getIcon('goals', { size: 20 })} <span>${goal.name}</span>
+              </h3>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Kategori: ${goal.category} • Tenggat: ${goal.deadline}</span>
             </div>
-            <button class="btn btn-secondary btn-sm" id="btn-close-goal-modal">&times;</button>
+            <button class="btn btn-secondary btn-sm" id="btn-close-goal-modal" style="display: flex; align-items: center; padding: 4px 8px;">${getIcon('close', { size: 18 })}</button>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 14px;">
@@ -565,7 +570,9 @@ export function renderAction(container, state, onNavigate) {
 
             <!-- Drivers -->
             <div>
-              <strong style="font-size: 0.88rem; color: var(--text-primary); display: block; margin-bottom: 8px;">📊 Faktor Pendorong Capaian (Drivers):</strong>
+              <strong style="font-size: 0.88rem; color: var(--text-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                ${getIcon('comparison', { size: 16 })} <span>Faktor Pendorong Capaian (Drivers):</span>
+              </strong>
               <div style="display: flex; flex-direction: column; gap: 6px;">
                 ${profile.drivers.map(d => `
                   <div style="background: var(--bg-primary); padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;">
@@ -582,7 +589,9 @@ export function renderAction(container, state, onNavigate) {
             <!-- Related Decisions -->
             ${profile.relatedDecisions.length > 0 ? `
               <div>
-                <strong style="font-size: 0.88rem; color: var(--text-primary); display: block; margin-bottom: 8px;">💡 Rekomendasi Terkait & Eksekusi 1-Klik:</strong>
+                <strong style="font-size: 0.88rem; color: var(--text-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                  ${getIcon('insight', { size: 16 })} <span>Rekomendasi Terkait & Eksekusi:</span>
+                </strong>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                   ${profile.relatedDecisions.map(r => `
                     <div style="background: var(--bg-primary); padding: 10px 12px; border-radius: 6px; border-left: 3px solid var(--ai-primary); display: flex; justify-content: space-between; align-items: center;">
@@ -590,7 +599,9 @@ export function renderAction(container, state, onNavigate) {
                         <strong style="font-size: 0.82rem; color: var(--text-primary);">${r.title}</strong>
                         <span style="font-size: 0.72rem; color: var(--success); display: block;">Dampak: ${r.impact}</span>
                       </div>
-                      <button class="btn btn-primary btn-sm btn-exec-goal-rec" data-rec-id="${r.id}" style="font-size: 0.72rem; padding: 4px 8px;">Eksekusi ⚡</button>
+                      <button class="btn btn-primary btn-sm btn-exec-goal-rec aibo-icon-btn" data-rec-id="${r.id}" style="font-size: 0.72rem; padding: 4px 10px;">
+                        ${getIcon('recommendation', { size: 12 })} <span>Eksekusi</span>
+                      </button>
                     </div>
                   `).join('')}
                 </div>
@@ -613,10 +624,12 @@ export function renderAction(container, state, onNavigate) {
           
           <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
             <div>
-              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary);">${rep.title}</h3>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                ${getIcon('reports', { size: 20 })} <span>${rep.title}</span>
+              </h3>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Kategori: ${rep.categoryLabel} • Verifikasi Resmi AIbo</span>
             </div>
-            <button class="btn btn-secondary btn-sm" id="btn-close-report-modal">&times;</button>
+            <button class="btn btn-secondary btn-sm" id="btn-close-report-modal" style="display: flex; align-items: center; padding: 4px 8px;">${getIcon('close', { size: 18 })}</button>
           </div>
 
           <!-- Printable Sheet Simulation -->
@@ -664,13 +677,13 @@ export function renderAction(container, state, onNavigate) {
             </div>
           </div>
 
-          <!-- Multi-Format Export Buttons (Explicit Prototype Simulations) -->
+          <!-- Multi-Format Export Buttons -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; flex-wrap: wrap; gap: 10px;">
             <button class="btn btn-secondary" id="btn-close-report-modal-2">Tutup</button>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-secondary btn-sm" id="btn-sim-export-csv" style="font-size: 0.78rem;">📄 CSV (Simulasi)</button>
-              <button class="btn btn-secondary btn-sm" id="btn-sim-export-xlsx" style="font-size: 0.78rem;">📊 XLSX (Simulasi)</button>
-              <button class="btn btn-primary btn-sm" id="btn-download-pdf-sim" style="font-size: 0.78rem; font-weight: 700;">📥 Cetak PDF (Simulasi)</button>
+              <button class="btn btn-secondary btn-sm aibo-icon-btn" id="btn-sim-export-csv" style="font-size: 0.78rem;">${getIcon('export', { size: 13 })} <span>Ekspor CSV</span></button>
+              <button class="btn btn-secondary btn-sm aibo-icon-btn" id="btn-sim-export-xlsx" style="font-size: 0.78rem;">${getIcon('export', { size: 13 })} <span>Ekspor XLSX</span></button>
+              <button class="btn btn-primary btn-sm aibo-icon-btn" id="btn-download-pdf-sim" style="font-size: 0.78rem; font-weight: 700;">${getIcon('download', { size: 14 })} <span>Cetak Laporan PDF</span></button>
             </div>
           </div>
 

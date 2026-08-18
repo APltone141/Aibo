@@ -5,6 +5,7 @@
 import { getLanguage, setLanguage, t } from '../i18n.js';
 import { showToast, formatCurrency } from '../utils.js';
 import { upgradeSubscription } from '../state.js';
+import { getIcon } from '../icons.js';
 
 export function renderProfile(container, state, onNavigate) {
   const biz = state.business || {};
@@ -36,20 +37,20 @@ export function renderProfile(container, state, onNavigate) {
         <!-- Top Sub Navigation Tabs -->
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap; gap: 12px;">
           <div style="display: flex; gap: 8px;">
-            <button class="btn ${activeTab === 'profile' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab" data-tab="profile" style="padding: 8px 16px; font-size: 0.84rem;">
-              🏢 Profil & Identitas Bisnis
+            <button class="btn ${activeTab === 'profile' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="profile" style="padding: 8px 16px; font-size: 0.84rem;">
+              ${getIcon('profile', { size: 16 })} <span>Profil & Identitas Bisnis</span>
             </button>
-            <button class="btn ${activeTab === 'billing' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab" data-tab="billing" style="padding: 8px 16px; font-size: 0.84rem;">
-              💳 Paket Langganan & Kuota (${sub.plan})
+            <button class="btn ${activeTab === 'billing' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="billing" style="padding: 8px 16px; font-size: 0.84rem;">
+              ${getIcon('billing', { size: 16 })} <span>Paket Langganan & Kuota (${sub.plan})</span>
             </button>
-            <button class="btn ${activeTab === 'team' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab" data-tab="team" style="padding: 8px 16px; font-size: 0.84rem;">
-              👥 Tim & Hak Akses
+            <button class="btn ${activeTab === 'team' ? 'btn-primary' : 'btn-secondary'} btn-profile-tab aibo-icon-btn" data-tab="team" style="padding: 8px 16px; font-size: 0.84rem;">
+              ${getIcon('team', { size: 16 })} <span>Tim & Hak Akses</span>
             </button>
           </div>
 
           <!-- Language Selector -->
           <div style="display: flex; align-items: center; gap: 6px; background: var(--bg-primary); padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <span style="font-size: 0.75rem; color: var(--text-muted);">🌐 Bahasa:</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px;">${getIcon('globe', { size: 14 })} Bahasa:</span>
             <button class="btn btn-sm ${activeLang === 'id' ? 'btn-primary' : 'btn-secondary'}" id="btn-lang-id" style="padding: 2px 8px; font-size: 0.75rem;">ID</button>
             <button class="btn btn-sm ${activeLang === 'en' ? 'btn-primary' : 'btn-secondary'}" id="btn-lang-en" style="padding: 2px 8px; font-size: 0.75rem;">EN</button>
           </div>
@@ -230,14 +231,13 @@ export function renderProfile(container, state, onNavigate) {
               <span class="badge badge-low" style="font-size: 0.75rem; padding: 6px 12px;">✓ Akses Fitur Lengkap Terbuka</span>
             `}
           </div>
-
           <!-- Quota Progress Bars -->
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-top: 14px; border-top: 1px solid var(--border-color);">
             
             <!-- AI Prompts Quota -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
               <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
-                <span>🤖 AI Business Copilot</span>
+                <span style="display: flex; align-items: center; gap: 4px;">${getIcon('copilot', { size: 14 })} AI Business Copilot</span>
                 <strong>${q.ai_prompts.used} / ${q.ai_prompts.max} Prompt</strong>
               </div>
               <div style="width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden;">
@@ -249,7 +249,7 @@ export function renderProfile(container, state, onNavigate) {
             <!-- Integrations Quota -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
               <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
-                <span>📁 Integrasi Platform Data</span>
+                <span style="display: flex; align-items: center; gap: 4px;">${getIcon('dataCenter', { size: 14 })} Integrasi Platform Data</span>
                 <strong>${q.integrations.used} / ${q.integrations.max} Sumber</strong>
               </div>
               <div style="width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden;">
@@ -261,7 +261,7 @@ export function renderProfile(container, state, onNavigate) {
             <!-- Team Seats Quota -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
               <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
-                <span>👥 Kursi Anggota Tim</span>
+                <span style="display: flex; align-items: center; gap: 4px;">${getIcon('team', { size: 14 })} Kursi Anggota Tim</span>
                 <strong>${q.team_seats.used} / ${q.team_seats.max} Akun</strong>
               </div>
               <div style="width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden;">
@@ -327,7 +327,7 @@ export function renderProfile(container, state, onNavigate) {
             <!-- Tier 2: Pro SME (Popular) -->
             <div class="card" style="background: var(--bg-card); border: 2px solid var(--ai-primary); display: flex; flex-direction: column; justify-content: space-between; padding: 18px; position: relative; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);">
               <span class="badge" style="position: absolute; top: -10px; right: 18px; background: var(--ai-primary); color: white; font-size: 0.65rem; font-weight: 700; padding: 2px 8px;">
-                PALING POPULER ⭐
+                PALING POPULER
               </span>
               <div>
                 <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--ai-primary); margin-bottom: 4px;">Pro SME</h4>
@@ -355,8 +355,8 @@ export function renderProfile(container, state, onNavigate) {
                 ${isPro ? `
                   <button class="btn btn-secondary" disabled style="width: 100%; font-size: 0.78rem; border-color: var(--success); color: var(--success); font-weight: 700;">✓ Paket Aktif</button>
                 ` : `
-                  <button class="btn btn-primary btn-open-checkout" data-tier="pro" data-name="Pro SME" data-price="${billingCycle === 'annual' ? 2870400 : 299000}" style="width: 100%; font-size: 0.78rem; font-weight: 700;">
-                    🚀 Upgrade ke Pro SME
+                  <button class="btn btn-primary btn-open-checkout aibo-icon-btn" data-tier="pro" data-name="Pro SME" data-price="${billingCycle === 'annual' ? 2870400 : 299000}" style="width: 100%; font-size: 0.78rem; font-weight: 700; justify-content: center;">
+                    ${getIcon('recommendation', { size: 14 })} <span>Upgrade ke Pro SME</span>
                   </button>
                 `}
               </div>
@@ -388,8 +388,8 @@ export function renderProfile(container, state, onNavigate) {
                 ${isEnterprise ? `
                   <button class="btn btn-secondary" disabled style="width: 100%; font-size: 0.78rem; border-color: var(--success); color: var(--success); font-weight: 700;">✓ Paket Aktif</button>
                 ` : `
-                  <button class="btn btn-secondary btn-open-checkout" data-tier="enterprise" data-name="Enterprise" data-price="${billingCycle === 'annual' ? 8630400 : 899000}" style="width: 100%; font-size: 0.78rem; font-weight: 700;">
-                    Hubungi / Upgrade Enterprise
+                  <button class="btn btn-secondary btn-open-checkout aibo-icon-btn" data-tier="enterprise" data-name="Enterprise" data-price="${billingCycle === 'annual' ? 8630400 : 899000}" style="width: 100%; font-size: 0.78rem; font-weight: 700; justify-content: center;">
+                    ${getIcon('support', { size: 14 })} <span>Upgrade Enterprise</span>
                   </button>
                 `}
               </div>
@@ -409,7 +409,7 @@ export function renderProfile(container, state, onNavigate) {
         <!-- Active Team Roles Card -->
         <div class="card">
           <div class="card-title">
-            <span>👥 Anggota Tim Terdaftar</span>
+            <span style="display: flex; align-items: center; gap: 6px;">${getIcon('team', { size: 18 })} <span>Anggota Tim Terdaftar</span></span>
             <span class="badge badge-low" style="font-size: 0.65rem;">4 Akun Aktif</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
@@ -448,40 +448,40 @@ export function renderProfile(container, state, onNavigate) {
                 <strong>Dashboard & Health Score</strong>
                 <span style="color: var(--success); font-weight: bold;">Full Access</span>
                 <span style="color: var(--success); font-weight: bold;">Full Access</span>
-                <span style="color: var(--ai-primary);">Lihat Sahaja</span>
-                <span style="color: var(--ai-primary);">Lihat Sahaja</span>
+                <span style="color: var(--primary);">View Only</span>
+                <span style="color: var(--primary);">View Only</span>
               </div>
 
               <div class="analytics-table-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr;">
-                <strong>Analitik (6 Tab Deep-Dive)</strong>
-                <span style="color: var(--success); font-weight: bold;">Full Access</span>
-                <span style="color: var(--success); font-weight: bold;">Full Access</span>
-                <span style="color: var(--success); font-weight: bold;">Full Access</span>
-                <span style="color: var(--ai-primary);">Marketing & Sales</span>
+                <strong>Decision Center (Eksekusi)</strong>
+                <span style="color: var(--success); font-weight: bold;">Full (Langsung)</span>
+                <span style="color: var(--warning); font-weight: bold;">Butuh Approval</span>
+                <span style="color: var(--text-muted);">No Access</span>
+                <span style="color: var(--text-muted);">No Access</span>
               </div>
 
               <div class="analytics-table-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr;">
-                <strong>Decision Center & Eksekusi</strong>
+                <strong>Action Center (Tugas & Goal)</strong>
                 <span style="color: var(--success); font-weight: bold;">Full Access</span>
-                <span style="color: var(--ai-primary);">Ajukan Persetujuan</span>
-                <span style="color: var(--text-muted);">Tanpa Akses</span>
-                <span style="color: var(--ai-primary);">Ajukan Persetujuan</span>
+                <span style="color: var(--success); font-weight: bold;">Full Access</span>
+                <span style="color: var(--primary);">View Only</span>
+                <span style="color: var(--primary);">View Only</span>
               </div>
 
               <div class="analytics-table-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr;">
-                <strong>Persetujuan Tim (Approvals)</strong>
-                <span style="color: var(--success); font-weight: bold;">Approve / Reject</span>
-                <span style="color: var(--ai-primary);">Pengaju (Submitter)</span>
-                <span style="color: var(--text-muted);">Tanpa Akses</span>
-                <span style="color: var(--text-muted);">Tanpa Akses</span>
+                <strong>Data Center & Integrasi</strong>
+                <span style="color: var(--success); font-weight: bold;">Full Access</span>
+                <span style="color: var(--primary);">Sync & Upload</span>
+                <span style="color: var(--primary);">Upload Saja</span>
+                <span style="color: var(--text-muted);">No Access</span>
               </div>
 
               <div class="analytics-table-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr;">
-                <strong>Data Center & Upload Dataset</strong>
+                <strong>Langganan & Pembayaran</strong>
                 <span style="color: var(--success); font-weight: bold;">Full Access</span>
-                <span style="color: var(--success); font-weight: bold;">Full Access</span>
-                <span style="color: var(--ai-primary);">Dataset Keuangan</span>
-                <span style="color: var(--text-muted);">Tanpa Akses</span>
+                <span style="color: var(--text-muted);">No Access</span>
+                <span style="color: var(--text-muted);">No Access</span>
+                <span style="color: var(--text-muted);">No Access</span>
               </div>
             </div>
           </div>
@@ -493,15 +493,17 @@ export function renderProfile(container, state, onNavigate) {
 
   function renderCheckoutModal(item, cycle, method, vaBank) {
     return `
-      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px;">
-        <div class="card animate-fade-in" style="max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); padding: 24px;">
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px;">
+        <div class="card animate-fade-in" style="max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); padding: 24px; background: var(--bg-card);">
           
           <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
             <div>
-              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary);">Pembayaran Langganan AIbo</h3>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">Simulasi Payment Gateway (Midtrans/Xendit Ready)</span>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                ${getIcon('billing', { size: 20 })} <span>Pembayaran Langganan AIbo</span>
+              </h3>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Verifikasi Pembayaran Otomatis</span>
             </div>
-            <button class="btn btn-secondary btn-sm" id="btn-close-checkout-modal">&times;</button>
+            <button class="btn btn-secondary btn-sm" id="btn-close-checkout-modal" style="display: flex; align-items: center; padding: 4px 8px;">${getIcon('close', { size: 18 })}</button>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 14px;">
@@ -526,14 +528,14 @@ export function renderProfile(container, state, onNavigate) {
             <div>
               <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Pilih Metode Pembayaran:</label>
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;" id="pay-method-grid">
-                <button class="btn btn-sm ${method === 'qris' ? 'btn-primary' : 'btn-secondary'} btn-select-method" data-method="qris" style="padding: 8px 6px; font-size: 0.75rem;">
-                  📱 QRIS (Instant)
+                <button class="btn btn-sm ${method === 'qris' ? 'btn-primary' : 'btn-secondary'} btn-select-method aibo-icon-btn" data-method="qris" style="padding: 8px 6px; font-size: 0.75rem; justify-content: center;">
+                  ${getIcon('qris', { size: 16 })} <span>QRIS</span>
                 </button>
-                <button class="btn btn-sm ${method === 'va' ? 'btn-primary' : 'btn-secondary'} btn-select-method" data-method="va" style="padding: 8px 6px; font-size: 0.75rem;">
-                  🏦 Virtual Account
+                <button class="btn btn-sm ${method === 'va' ? 'btn-primary' : 'btn-secondary'} btn-select-method aibo-icon-btn" data-method="va" style="padding: 8px 6px; font-size: 0.75rem; justify-content: center;">
+                  ${getIcon('va', { size: 16 })} <span>Virtual Account</span>
                 </button>
-                <button class="btn btn-sm ${method === 'cc' ? 'btn-primary' : 'btn-secondary'} btn-select-method" data-method="cc" style="padding: 8px 6px; font-size: 0.75rem;">
-                  💳 Kartu Kredit
+                <button class="btn btn-sm ${method === 'cc' ? 'btn-primary' : 'btn-secondary'} btn-select-method aibo-icon-btn" data-method="cc" style="padding: 8px 6px; font-size: 0.75rem; justify-content: center;">
+                  ${getIcon('credit-card', { size: 16 })} <span>Kartu Kredit</span>
                 </button>
               </div>
             </div>
@@ -543,7 +545,7 @@ export function renderProfile(container, state, onNavigate) {
               <div style="text-align: center; background: white; color: black; padding: 16px; border-radius: 8px;">
                 <span style="font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 8px;">Scan QRIS via BCA Mobile, GoPay, OVO, atau Dana</span>
                 <div style="width: 140px; height: 140px; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: white; font-family: monospace; font-size: 0.75rem; text-align: center; padding: 8px;">
-                  [ QRIS SIMULASI AIBO PAYMENT ]
+                  [ QRIS INSTANT AIBO ]
                 </div>
                 <span style="font-size: 0.7rem; color: #64748b; margin-top: 6px; display: block;">NMID: ID102026AIBOPROTO</span>
               </div>
@@ -568,8 +570,8 @@ export function renderProfile(container, state, onNavigate) {
               </div>
             `)}
 
-            <button class="btn btn-primary" id="btn-complete-sim-payment" style="width: 100%; font-weight: 700; padding: 12px; margin-top: 6px;">
-              ✓ Selesaikan Pembayaran Simulasi (${formatCurrency(item.price)})
+            <button class="btn btn-primary aibo-icon-btn" id="btn-complete-sim-payment" style="width: 100%; font-weight: 700; padding: 12px; margin-top: 6px; justify-content: center;">
+              ${getIcon('check', { size: 16 })} <span>Konfirmasi & Selesaikan Pembayaran (${formatCurrency(item.price)})</span>
             </button>
           </div>
         </div>

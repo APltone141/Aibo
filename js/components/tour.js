@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { showToast } from '../utils.js';
+import { getIcon } from '../icons.js';
 
 export function initProductTour(appState, onNavigate, forceRestart = false) {
   if (!appState.tour) {
@@ -33,7 +34,7 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'welcome',
       target: null,
       screen: 'dashboard',
-      title: '👋 Selamat Datang di AIbo!',
+      title: 'Selamat Datang di AIbo!',
       content: 'AIbo adalah AI Business Companion yang membantu Anda memahami performa usaha, mendeteksi masalah, dan mengambil tindakan terbaik tanpa rumus rumit.',
       position: 'center'
     },
@@ -41,7 +42,7 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'dashboard',
       target: '#nav-dashboard',
       screen: 'dashboard',
-      title: '📊 Executive Dashboard',
+      title: 'Executive Dashboard',
       content: 'Pusat kontrol utama usaha Anda. Di sini Anda dapat melihat kesehatan bisnis, metrik kunci (KPI), dan rekomendasi prioritas AIbo.',
       position: 'bottom'
     },
@@ -49,7 +50,7 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'health',
       target: '.health-gauge-card, [id*="health"]',
       screen: 'dashboard',
-      title: '❤️ Skor Kesehatan Usaha (6 Dimensi)',
+      title: 'Skor Kesehatan Usaha (6 Dimensi)',
       content: 'AIbo mengukur kesehatan bisnis Anda secara holistik melalui 6 dimensi: Revenue, Profitability, Customers, Marketing, Inventory, dan Cash Flow. Klik skor ini untuk detail.',
       position: 'right'
     },
@@ -57,7 +58,7 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'kpis',
       target: '.kpi-grid, [class*="kpi"]',
       screen: 'dashboard',
-      title: '📈 Kartu Metrik Kunci (KPI)',
+      title: 'Kartu Metrik Kunci (KPI)',
       content: 'Pantau Omzet, Laba Bersih, Marjin Laba, dan Jumlah Pelanggan secara real-time. Setiap kartu bisa diklik untuk melihat faktor penyebab perubahan (drivers).',
       position: 'bottom'
     },
@@ -65,7 +66,7 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'analytics',
       target: '#nav-analytics',
       screen: 'analytics',
-      title: '🔍 Analisis Mendalam (6 Tab)',
+      title: 'Analisis Mendalam (6 Tab)',
       content: 'Gali data penjualan, profitabilitas, segmen pelanggan, ROI marketing, kesehatan stok, dan arus kas. Setiap grafik dilengkapi penjelasan bahasa awam dari AIbo.',
       position: 'bottom'
     },
@@ -73,7 +74,7 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'decision',
       target: '#nav-decision',
       screen: 'decision',
-      title: '💡 Decision Center & 8-Langkah Transparansi',
+      title: 'Decision Center & 8-Langkah Transparansi',
       content: 'Tempat AIbo memberikan rekomendasi strategis. Setiap rekomendasi dijelaskan lengkap melalui 8 langkah transparansi: Ringkasan → Penyebab → Bukti → Dampak → Opsi → Konsekuensi → Saran → Aksi.',
       position: 'bottom'
     },
@@ -81,7 +82,7 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'action',
       target: '#nav-action',
       screen: 'action',
-      title: '📋 Action Center & Task Board',
+      title: 'Action Center & Task Board',
       content: 'Ubah rekomendasi AIbo menjadi daftar tugas nyata. Kelola dalam tampilan List atau Kanban Board (To Do, In Progress, Completed), dan cetak laporan bisnis.',
       position: 'bottom'
     },
@@ -89,7 +90,7 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'datacenter',
       target: '#nav-data',
       screen: 'data',
-      title: '🔗 Data Center & Quality Scorecard',
+      title: 'Data Center & Quality Scorecard',
       content: 'Hubungkan platform kasir POS, e-commerce, atau unggah file transaksi bulanan Anda. AIbo akan mengecek tingkat akurasi dan kelengkapan data usaha Anda.',
       position: 'bottom'
     },
@@ -97,24 +98,15 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       id: 'copilot',
       target: '#chat-messages-box, #chat-user-input',
       screen: 'decision',
-      title: '🤖 AI Business Copilot',
-      content: 'Tanyakan apa saja tentang kondisi usaha Anda kapan saja! AIbo siap menjawab pertanyaan seperti: "Kenapa omzet minggu ini turun?" atau "Produk apa yang paling laku?"',
-      position: 'top-left'
-    },
-    {
-      id: 'finish',
-      target: null,
-      screen: 'dashboard',
-      title: '🎉 Tour Selesai & Siap Digunakan!',
-      content: 'Anda sudah mengenal seluruh fitur utama AIbo. Anda bisa membuka kembali Tur Produk ini kapan saja melalui tombol bantuan ❓ di bagian atas antarmuka.',
-      position: 'center'
+      title: 'AI Business Copilot',
+      content: 'Tanyakan apa pun tentang performa bisnis Anda dalam bahasa natural Indonesia (seperti mengobrol dengan asisten/konsultan bisnis pribadi).',
+      position: 'top'
     }
   ];
 
   let currentStepIdx = appState.tour.currentStep || 0;
 
   function renderStep() {
-    // Clean existing tour elements
     removeTourDOM();
 
     if (currentStepIdx >= tourSteps.length) {
@@ -125,89 +117,87 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
     const step = tourSteps[currentStepIdx];
     appState.tour.currentStep = currentStepIdx;
 
-    // Navigate to step screen if necessary
+    // Navigate to corresponding screen if needed
     if (step.screen && onNavigate) {
-      onNavigate(step.screen);
+      const activeNav = document.querySelector('.nav-item.active');
+      const currentScreen = activeNav ? activeNav.getAttribute('href')?.replace('#', '') : 'dashboard';
+      if (currentScreen !== step.screen) {
+        onNavigate(step.screen);
+      }
     }
 
-    // Wait short delay for screen render
-    setTimeout(() => {
-      buildTourUI(step);
-    }, 150);
-  }
-
-  function buildTourUI(step) {
-    removeTourDOM();
-
-    // Create backdrop overlay
+    // Render dark backdrop overlay
     const backdrop = document.createElement('div');
     backdrop.id = 'tour-backdrop';
     backdrop.style.cssText = `
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(3px);
-      z-index: 99990;
-      pointer-events: auto;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 9998;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(2px);
     `;
     document.body.appendChild(backdrop);
 
-    // Create Tooltip Modal Card
+    // Target element highlighting
+    let targetEl = null;
+    if (step.target) {
+      targetEl = document.querySelector(step.target);
+    }
+
+    if (targetEl) {
+      const rect = targetEl.getBoundingClientRect();
+      const highlight = document.createElement('div');
+      highlight.id = 'tour-element-highlight';
+      highlight.style.cssText = `
+        position: fixed;
+        top: ${rect.top - 4}px;
+        left: ${rect.left - 4}px;
+        width: ${rect.width + 8}px;
+        height: ${rect.height + 8}px;
+        border-radius: var(--radius-sm);
+        border: 2px solid var(--primary);
+        box-shadow: 0 0 0 9999px rgba(0,0,0,0.6), 0 0 20px rgba(99, 102, 241, 0.4);
+        z-index: 9999;
+        pointer-events: none;
+        transition: all 0.3s ease;
+      `;
+      document.body.appendChild(highlight);
+    }
+
+    // Render popover dialog
     const card = document.createElement('div');
     card.id = 'tour-popover-card';
     card.className = 'card animate-fade-in';
     card.style.cssText = `
       position: fixed;
-      z-index: 99995;
       width: 360px;
-      max-width: 90vw;
+      max-width: calc(100vw - 32px);
+      z-index: 10000;
       background: var(--bg-card-solid);
       border: 2px solid var(--primary);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      box-shadow: var(--shadow-lg);
       padding: 20px;
-      border-radius: var(--radius-md);
-      color: var(--text-primary);
     `;
 
     // Position popover
-    if (step.position === 'center' || !step.target) {
+    if (step.position === 'center' || !targetEl) {
       card.style.top = '50%';
       card.style.left = '50%';
       card.style.transform = 'translate(-50%, -50%)';
     } else {
-      const el = document.querySelector(step.target);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        
-        // Highlight element
-        const highlight = document.createElement('div');
-        highlight.id = 'tour-element-highlight';
-        highlight.style.cssText = `
-          position: fixed;
-          top: ${rect.top - 6}px;
-          left: ${rect.left - 6}px;
-          width: ${rect.width + 12}px;
-          height: ${rect.height + 12}px;
-          border: 3px solid var(--primary);
-          border-radius: var(--radius-sm);
-          z-index: 99992;
-          pointer-events: none;
-          box-shadow: 0 0 20px var(--primary-glow);
-          transition: all 0.3s ease;
-        `;
-        document.body.appendChild(highlight);
-
+      const rect = targetEl.getBoundingClientRect();
+      if (rect.top > 0 || rect.bottom > 0) {
         // Smart position card near element
         if (window.innerWidth <= 768) {
           card.style.bottom = '90px';
           card.style.left = '50%';
           card.style.transform = 'translateX(-50%)';
         } else {
-          card.style.top = Math.min(window.innerHeight - 260, Math.max(80, rect.bottom + 12)) + 'px';
+          card.style.top = Math.min(window.innerHeight - 300, Math.max(80, rect.bottom + 12)) + 'px';
           card.style.left = Math.min(window.innerWidth - 380, Math.max(20, rect.left)) + 'px';
         }
       } else {
-        // Fallback to center
         card.style.top = '50%';
         card.style.left = '50%';
         card.style.transform = 'translate(-50%, -50%)';
@@ -216,8 +206,8 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
 
     card.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
-        <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary); font-family: var(--font-display);">
-          📌 TUR PRODUK AIBO (${currentStepIdx + 1} / ${tourSteps.length})
+        <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary); font-family: var(--font-display); display: flex; align-items: center; gap: 6px;">
+          ${getIcon('insight', { size: 14 })} <span>TUR PRODUK AIBO (${currentStepIdx + 1} / ${tourSteps.length})</span>
         </span>
         <button id="btn-tour-skip" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.78rem; text-decoration: underline;">
           Lewati Tour
@@ -228,8 +218,8 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
       <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">${step.content}</p>
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 12px;">
-        <button class="btn btn-secondary btn-sm" id="btn-tour-prev" ${currentStepIdx === 0 ? 'disabled style="opacity: 0.4;"' : ''}>
-          ◀ Kembali
+        <button class="btn btn-secondary btn-sm aibo-icon-btn" id="btn-tour-prev" ${currentStepIdx === 0 ? 'disabled style="opacity: 0.4;"' : ''}>
+          ${getIcon('arrow-left', { size: 13 })} <span>Kembali</span>
         </button>
 
         <div style="display: flex; gap: 4px;">
@@ -238,8 +228,8 @@ export function initProductTour(appState, onNavigate, forceRestart = false) {
           `).join('')}
         </div>
 
-        <button class="btn btn-primary btn-sm" id="btn-tour-next">
-          ${currentStepIdx === tourSteps.length - 1 ? 'Selesai 🎉' : 'Lanjut ▶'}
+        <button class="btn btn-primary btn-sm aibo-icon-btn" id="btn-tour-next">
+          <span>${currentStepIdx === tourSteps.length - 1 ? 'Selesai' : 'Lanjut'}</span> ${getIcon(currentStepIdx === tourSteps.length - 1 ? 'check' : 'arrow-right', { size: 13 })}
         </button>
       </div>
     `;

@@ -7,6 +7,7 @@
 import { formatCurrency, formatPercent, formatNumber, renderLineChart, showToast, animateCounter } from '../utils.js';
 import { applyRecommendation, completeTask, addCustomCalendarEvent, deleteCustomCalendarEvent } from '../state.js';
 import { renderContextHelp } from './contextHelp.js';
+import { getIcon } from '../icons.js';
 
 let currentCalendarMonth = 7; // August (0-indexed: 7)
 let currentCalendarYear = 2026;
@@ -61,7 +62,7 @@ export function renderDashboard(container, state, onNavigate) {
       ${!isAlertBannerDismissed ? `
         <div class="card animate-fade-in" id="dashboard-alert-banner" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, var(--bg-card) 100%); border: 1px solid var(--warning); border-left: 5px solid var(--warning); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 1.4rem;">⚠️</span>
+            <span style="color: var(--warning); display: flex; align-items: center;">${getIcon('warning', { size: 24 })}</span>
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <strong style="font-size: 0.92rem; color: var(--text-primary);">Peringatan Dini Operasional AIbo</strong>
@@ -73,13 +74,15 @@ export function renderDashboard(container, state, onNavigate) {
             </div>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="btn btn-sm btn-primary" id="btn-alert-reorder" style="font-size: 0.78rem; font-weight: 700; padding: 6px 12px;">
-              📦 Reorder Stok ➔
+            <button class="btn btn-sm btn-primary aibo-icon-btn" id="btn-alert-reorder" style="font-size: 0.78rem; font-weight: 700; padding: 6px 12px;">
+              ${getIcon('inventory', { size: 15 })} <span>Reorder Stok</span>
             </button>
-            <button class="btn btn-sm btn-secondary" id="btn-alert-optimize-ads" style="font-size: 0.78rem; font-weight: 600; padding: 6px 12px;">
-              ⚡ Optimasi Iklan
+            <button class="btn btn-sm btn-secondary aibo-icon-btn" id="btn-alert-optimize-ads" style="font-size: 0.78rem; font-weight: 600; padding: 6px 12px;">
+              ${getIcon('marketing', { size: 15 })} <span>Optimasi Iklan</span>
             </button>
-            <button class="btn btn-sm btn-secondary" id="btn-dismiss-alert" style="padding: 6px 8px;" title="Tutup Peringatan">&times;</button>
+            <button class="btn btn-sm btn-secondary" id="btn-dismiss-alert" style="padding: 6px 8px; display: flex; align-items: center;" title="Tutup Peringatan">
+              ${getIcon('close', { size: 14 })}
+            </button>
           </div>
         </div>
       ` : ''}
@@ -110,7 +113,9 @@ export function renderDashboard(container, state, onNavigate) {
               </span>
               <span style="font-size: 0.7rem; color: var(--text-muted);">6 Dimensi</span>
             </div>
-            <h2 style="font-size: 1.05rem; font-weight: 700; margin: 2px 0;">Skor Kesehatan Bisnis ${renderContextHelp('business_health')}</h2>
+            <h2 style="font-size: 1.05rem; font-weight: 700; margin: 2px 0; display: flex; align-items: center; gap: 4px;">
+              Skor Kesehatan Bisnis ${renderContextHelp('business_health')}
+            </h2>
             <p style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.35; margin: 0;">
               Kondisi operasional Nusa Brew sangat prima. Klik untuk evaluasi 6 pilar.
             </p>
@@ -120,8 +125,8 @@ export function renderDashboard(container, state, onNavigate) {
         <!-- 2. CASH RUNWAY & WORKING CAPITAL INDICATOR (Feature 1: Indikator Kas & Runway) -->
         <div class="card animate-fade-in" style="flex: 1.1; min-width: 280px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%); border-left: 4px solid var(--success);">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-size: 1.1rem;">💵</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="color: var(--success); display: flex; align-items: center;">${getIcon('cashflow', { size: 18 })}</span>
               <strong style="font-size: 0.9rem; color: var(--text-primary);">Kas Cair & Runway ${renderContextHelp('cash_flow')}</strong>
             </div>
             <span class="badge badge-low" style="font-size: 0.65rem;">${cashflow.status}</span>
@@ -147,8 +152,8 @@ export function renderDashboard(container, state, onNavigate) {
         <div class="card animate-fade-in" style="flex: 1.8; min-width: 320px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, var(--bg-card) 100%); border: 1px solid var(--border-color);">
           <div style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <div style="width: 28px; height: 28px; border-radius: 6px; background: var(--ai-primary-glow); display: flex; align-items: center; justify-content: center; font-size: 1rem;">
-                ✨
+              <div style="width: 28px; height: 28px; border-radius: 6px; background: var(--ai-primary-glow); display: flex; align-items: center; justify-content: center; color: var(--ai-primary);">
+                ${getIcon('copilot', { size: 16 })}
               </div>
               <div>
                 <strong style="font-size: 0.95rem; color: var(--text-primary);">Ringkasan Harian AIbo (AI Daily Brief)</strong>
@@ -163,11 +168,11 @@ export function renderDashboard(container, state, onNavigate) {
           </p>
 
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="btn btn-primary btn-sm" id="btn-view-brief-recs" style="font-size: 0.78rem; padding: 6px 12px;">
-              ⚡ Tinjau Rekomendasi (${recommendations.length})
+            <button class="btn btn-primary btn-sm aibo-icon-btn" id="btn-view-brief-recs" style="font-size: 0.78rem; padding: 6px 12px;">
+              ${getIcon('recommendation', { size: 15 })} <span>Tinjau Rekomendasi (${recommendations.length})</span>
             </button>
-            <button class="btn btn-secondary btn-sm" id="btn-view-analytics-shortcut" style="font-size: 0.78rem; padding: 6px 12px;">
-              📈 Eksplorasi 6-Tab Analitik
+            <button class="btn btn-secondary btn-sm aibo-icon-btn" id="btn-view-analytics-shortcut" style="font-size: 0.78rem; padding: 6px 12px;">
+              ${getIcon('analytics', { size: 15 })} <span>Eksplorasi Analitik</span>
             </button>
           </div>
         </div>
@@ -178,7 +183,7 @@ export function renderDashboard(container, state, onNavigate) {
       <div class="card animate-fade-in" id="dashboard-goal-strip" style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 12px 18px; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease;" title="Klik untuk membuka rincian faktor pendorong target">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 1.1rem;">🎯</span>
+            <span style="color: var(--primary); display: flex; align-items: center;">${getIcon('goal', { size: 18 })}</span>
             <strong style="font-size: 0.88rem; color: var(--text-primary);">${primaryGoal.name}</strong>
             <span class="badge badge-low" style="font-size: 0.65rem;">On Track</span>
           </div>
@@ -192,8 +197,8 @@ export function renderDashboard(container, state, onNavigate) {
         </div>
 
         <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
-          <span>💡 Proyeksi AIbo: <strong>Rp 512.000.000 (+2.4% melampaui target)</strong> jika realokasi iklan dieksekusi.</span>
-          <span style="color: var(--primary); font-weight: 600;">Lihat Rincian Drivers ➔</span>
+          <span style="display: flex; align-items: center; gap: 4px;">${getIcon('insight', { size: 14 })} Proyeksi AIbo: <strong>Rp 512.000.000 (+2.4% melampaui target)</strong> jika realokasi iklan dieksekusi.</span>
+          <span style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 4px;">Lihat Rincian Drivers ${getIcon('chevron-right', { size: 13 })}</span>
         </div>
       </div>
 
@@ -204,11 +209,11 @@ export function renderDashboard(container, state, onNavigate) {
         <div class="card kpi-card clickable-kpi" data-kpi="revenue" style="cursor: pointer;" title="Klik untuk detail breakdown omset">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Total Omset</span>
-            <span style="font-size: 0.7rem; color: var(--primary);">🔍</span>
+            <span style="color: var(--primary); display: flex; align-items: center;">${getIcon('chart-detail', { size: 16 })}</span>
           </div>
           <div class="kpi-val" id="kpi-revenue-val">${formatCurrency(kpis.revenue.current)}</div>
-          <div class="kpi-change change-up">
-            ▲ ${kpis.revenue.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">vs bulan lalu</span>
+          <div class="kpi-change change-up" style="display: flex; align-items: center; gap: 4px;">
+            ${getIcon('trend-up', { size: 14 })} ${kpis.revenue.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">vs bulan lalu</span>
           </div>
           <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
             ${renderLineChart(revenueTrendData.slice(-4), 160, 45, 'var(--primary)')}
@@ -219,11 +224,11 @@ export function renderDashboard(container, state, onNavigate) {
         <div class="card kpi-card clickable-kpi" data-kpi="profit" style="cursor: pointer;" title="Klik untuk detail laba bersih">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Laba Bersih ${renderContextHelp('net_profit')}</span>
-            <span style="font-size: 0.7rem; color: var(--success);">🔍</span>
+            <span style="color: var(--success); display: flex; align-items: center;">${getIcon('chart-detail', { size: 16 })}</span>
           </div>
           <div class="kpi-val" id="kpi-profit-val">${formatCurrency(kpis.profit.current)}</div>
-          <div class="kpi-change change-up">
-            ▲ ${kpis.profit.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">vs target</span>
+          <div class="kpi-change change-up" style="display: flex; align-items: center; gap: 4px;">
+            ${getIcon('trend-up', { size: 14 })} ${kpis.profit.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">vs target</span>
           </div>
           <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
             ${renderLineChart(profitTrendData.slice(-4), 160, 45, 'var(--success)')}
@@ -234,11 +239,11 @@ export function renderDashboard(container, state, onNavigate) {
         <div class="card kpi-card clickable-kpi" data-kpi="customers" style="cursor: pointer;" title="Klik untuk detail pelanggan">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Total Pelanggan ${renderContextHelp('retention')}</span>
-            <span style="font-size: 0.7rem; color: var(--ai-primary);">🔍</span>
+            <span style="color: var(--ai-primary); display: flex; align-items: center;">${getIcon('chart-detail', { size: 16 })}</span>
           </div>
           <div class="kpi-val" id="kpi-customers-val">${formatNumber(kpis.customers.current)}</div>
-          <div class="kpi-change change-up">
-            ▲ ${kpis.customers.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">akuisisi</span>
+          <div class="kpi-change change-up" style="display: flex; align-items: center; gap: 4px;">
+            ${getIcon('trend-up', { size: 14 })} ${kpis.customers.change_percent}% <span style="color: var(--text-muted); font-size: 0.75rem;">akuisisi</span>
           </div>
           <div class="svg-chart-container" style="height: 45px; margin-top: 8px;">
             ${renderLineChart(customerTrendData.slice(-4), 160, 45, 'var(--ai-primary)')}
@@ -249,7 +254,7 @@ export function renderDashboard(container, state, onNavigate) {
         <div class="card kpi-card clickable-kpi" data-kpi="inventory" style="cursor: pointer;" title="Klik untuk detail stok">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Kesehatan Stok</span>
-            <span style="font-size: 0.7rem; color: var(--warning);">🔍</span>
+            <span style="color: var(--warning); display: flex; align-items: center;">${getIcon('chart-detail', { size: 16 })}</span>
           </div>
           <div class="kpi-val">${formatPercent(kpis.inventory_health.current)}</div>
           <div class="kpi-change ${kpis.inventory_health.current >= kpis.inventory_health.target ? 'change-up' : 'change-down'}" style="color: ${kpis.inventory_health.current >= kpis.inventory_health.target ? 'var(--success)' : 'var(--warning)'};">
@@ -267,7 +272,7 @@ export function renderDashboard(container, state, onNavigate) {
       <div class="card animate-fade-in" style="margin-bottom: 0;">
         <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.15rem;">📅</span>
+            <span style="color: var(--primary); display: flex; align-items: center;">${getIcon('calendar', { size: 22 })}</span>
             <div>
               <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">Kalender Agenda Bisnis & Timeline Tindakan</h3>
               <span style="font-size: 0.72rem; color: var(--text-muted);">Jadwal kampanye, batas stok, tugas tim, dan catatan mandiri</span>
@@ -278,27 +283,27 @@ export function renderDashboard(container, state, onNavigate) {
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
             
             <!-- Add Custom Event Button -->
-            <button class="btn btn-sm btn-primary" id="btn-open-add-event-modal" style="font-size: 0.78rem; font-weight: 700; padding: 6px 12px;">
-              ➕ Tambah Agenda / Catatan
+            <button class="btn btn-sm btn-primary aibo-icon-btn" id="btn-open-add-event-modal" style="font-size: 0.78rem; font-weight: 700; padding: 6px 12px;">
+              ${getIcon('plus', { size: 14 })} <span>Tambah Agenda / Catatan</span>
             </button>
 
             <!-- Month Switcher -->
             <div style="display: flex; align-items: center; gap: 4px; background: var(--bg-primary); padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <button class="btn btn-secondary btn-sm" id="btn-cal-prev" style="padding: 2px 8px; font-size: 0.75rem;">◀</button>
+              <button class="btn btn-secondary btn-sm" id="btn-cal-prev" style="padding: 4px 8px; display: flex; align-items: center;">${getIcon('chevron-left', { size: 14 })}</button>
               <strong style="font-size: 0.8rem; min-width: 95px; text-align: center;" id="cal-month-label">Agustus 2026</strong>
-              <button class="btn btn-secondary btn-sm" id="btn-cal-next" style="padding: 2px 8px; font-size: 0.75rem;">▶</button>
+              <button class="btn btn-secondary btn-sm" id="btn-cal-next" style="padding: 4px 8px; display: flex; align-items: center;">${getIcon('chevron-right', { size: 14 })}</button>
             </div>
           </div>
         </div>
 
         <!-- Filter Categories Pill Bar -->
         <div style="display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;" id="calendar-filter-bar">
-          <button class="btn btn-sm ${currentCalendarFilter === 'all' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="all" style="font-size: 0.75rem; padding: 4px 10px;">Semua</button>
-          <button class="btn btn-sm ${currentCalendarFilter === 'marketing' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="marketing" style="font-size: 0.75rem; padding: 4px 10px;">📢 Marketing Ads</button>
-          <button class="btn btn-sm ${currentCalendarFilter === 'inventory' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="inventory" style="font-size: 0.75rem; padding: 4px 10px;">📦 Reorder Stok</button>
-          <button class="btn btn-sm ${currentCalendarFilter === 'tasks' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="tasks" style="font-size: 0.75rem; padding: 4px 10px;">🎯 Tugas Tim</button>
-          <button class="btn btn-sm ${currentCalendarFilter === 'custom' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="custom" style="font-size: 0.75rem; padding: 4px 10px;">📝 Catatan Mandiri</button>
-          <button class="btn btn-sm ${currentCalendarFilter === 'goals' ? 'active-cal-filter' : 'btn-secondary'}" data-filter="goals" style="font-size: 0.75rem; padding: 4px 10px;">🏁 Target Goals</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'all' ? 'active-cal-filter' : 'btn-secondary'} aibo-icon-btn" data-filter="all" style="font-size: 0.75rem; padding: 4px 10px;">Semua</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'marketing' ? 'active-cal-filter' : 'btn-secondary'} aibo-icon-btn" data-filter="marketing" style="font-size: 0.75rem; padding: 4px 10px;">${getIcon('marketing', { size: 13 })} Marketing Ads</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'inventory' ? 'active-cal-filter' : 'btn-secondary'} aibo-icon-btn" data-filter="inventory" style="font-size: 0.75rem; padding: 4px 10px;">${getIcon('inventory', { size: 13 })} Reorder Stok</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'tasks' ? 'active-cal-filter' : 'btn-secondary'} aibo-icon-btn" data-filter="tasks" style="font-size: 0.75rem; padding: 4px 10px;">${getIcon('task', { size: 13 })} Tugas Tim</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'custom' ? 'active-cal-filter' : 'btn-secondary'} aibo-icon-btn" data-filter="custom" style="font-size: 0.75rem; padding: 4px 10px;">${getIcon('edit', { size: 13 })} Catatan Mandiri</button>
+          <button class="btn btn-sm ${currentCalendarFilter === 'goals' ? 'active-cal-filter' : 'btn-secondary'} aibo-icon-btn" data-filter="goals" style="font-size: 0.75rem; padding: 4px 10px;">${getIcon('goal', { size: 13 })} Target Goals</button>
         </div>
 
         <!-- 7-Column Visual Month Calendar Grid -->
@@ -307,8 +312,8 @@ export function renderDashboard(container, state, onNavigate) {
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 8px;">
-          <span>💡 <strong>Tips:</strong> Klik pada tanggal mana pun untuk melihat rincian agenda atau menambahkan catatan kustom baru.</span>
-          <span style="color: var(--ai-primary); font-weight: 600;">Sinkronisasi Real-time ✓</span>
+          <span style="display: flex; align-items: center; gap: 4px;">${getIcon('info', { size: 13 })} <strong>Tips:</strong> Klik pada tanggal mana pun untuk melihat rincian agenda atau menambahkan catatan kustom baru.</span>
+          <span style="color: var(--ai-primary); font-weight: 600; display: flex; align-items: center; gap: 4px;">${getIcon('check', { size: 13 })} Sinkronisasi Real-time</span>
         </div>
       </div>
 
@@ -319,10 +324,10 @@ export function renderDashboard(container, state, onNavigate) {
         <div class="card animate-fade-in">
           <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span>💡 Rekomendasi Prioritas AIbo</span>
+              <span style="display: flex; align-items: center; gap: 6px; color: var(--primary);">${getIcon('recommendation', { size: 18 })} <strong>Rekomendasi Prioritas AIbo</strong></span>
               <span class="badge badge-high" style="font-size: 0.65rem;">${recommendations.length} Pending</span>
             </div>
-            <a id="btn-goto-decision" style="font-size: 0.78rem; color: var(--primary); cursor: pointer; font-weight: 600;">Lihat Semua ➔</a>
+            <a id="btn-goto-decision" style="font-size: 0.78rem; color: var(--primary); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 4px;">Lihat Semua ${getIcon('arrow-right', { size: 13 })}</a>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
@@ -339,8 +344,8 @@ export function renderDashboard(container, state, onNavigate) {
                     <button class="btn btn-secondary btn-sm btn-view-rec-detail" data-id="${r.id}" style="font-size: 0.72rem; padding: 4px 8px;">
                       Bukti Data
                     </button>
-                    <button class="btn btn-primary btn-sm btn-apply-rec" data-id="${r.id}" style="font-size: 0.72rem; padding: 4px 8px;">
-                      Terapkan ⚡
+                    <button class="btn btn-primary btn-sm btn-apply-rec aibo-icon-btn" data-id="${r.id}" style="font-size: 0.72rem; padding: 4px 8px;">
+                      ${getIcon('recommendation', { size: 13 })} <span>Terapkan</span>
                     </button>
                   </div>
                 </div>
@@ -353,10 +358,10 @@ export function renderDashboard(container, state, onNavigate) {
         <div class="card animate-fade-in">
           <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span>🎯 Tindakan & Tugas Tim</span>
+              <span style="display: flex; align-items: center; gap: 6px; color: var(--primary);">${getIcon('task', { size: 18 })} <strong>Tindakan & Tugas Tim</strong></span>
               <span class="badge badge-medium" style="font-size: 0.65rem;">${tasks.length} Terbuka</span>
             </div>
-            <a id="btn-goto-actions" style="font-size: 0.78rem; color: var(--primary); cursor: pointer; font-weight: 600;">Action Center ➔</a>
+            <a id="btn-goto-actions" style="font-size: 0.78rem; color: var(--primary); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 4px;">Action Center ${getIcon('arrow-right', { size: 13 })}</a>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
@@ -383,23 +388,28 @@ export function renderDashboard(container, state, onNavigate) {
       <div class="card animate-fade-in" style="width: 100%; max-width: 580px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
           <div>
-            <h3 style="font-size: 1.2rem; font-weight: 700; color: ${healthColor};">Evaluasi 6 Dimensi Kesehatan Bisnis</h3>
+            <h3 style="font-size: 1.2rem; font-weight: 700; color: ${healthColor}; display: flex; align-items: center; gap: 8px;">
+              ${getIcon('health', { size: 22 })} Evaluasi 6 Dimensi Kesehatan Bisnis
+            </h3>
             <span style="font-size: 0.75rem; color: var(--text-muted);">Skor Agregat Terbobot: ${health.score} / 100 (${healthText})</span>
           </div>
-          <button id="btn-close-health-modal" style="background: none; border: none; color: var(--text-secondary); font-size: 1.4rem; cursor: pointer;">&times;</button>
+          <button id="btn-close-health-modal" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center;">${getIcon('close', { size: 20 })}</button>
         </div>
         
         <div style="display: flex; flex-direction: column; gap: 10px;">
-          ${renderHealthDimensionRow('💰 Revenue (Pertumbuhan Omzet)', health.components.revenue, 'Omset tumbuh +11.8% vs bulan lalu. Sangat sehat.')}
-          ${renderHealthDimensionRow('📊 Profitabilitas (Margin Bersih)', health.components.profitability, 'Margin laba 20.0% melampaui target minimum (18%).')}
-          ${renderHealthDimensionRow('👥 Pelanggan & Retensi', health.components.customers, 'Retensi pelanggan 68.2% stabil di atas benchmark industri.')}
-          ${renderHealthDimensionRow('📣 Efektivitas Pemasaran (ROI)', health.components.marketing, 'Email marketing sangat tinggi (ROI 6.0x), namun TikTok perlu realokasi.')}
-          ${renderHealthDimensionRow('📦 Kesehatan Persediaan (Stok)', health.components.inventory, '2 SKU produk berada di bawah batas minimum (reorder point).')}
-          ${renderHealthDimensionRow('💵 Arus Kas (Cash Flow & Runway)', health.components.cashflow || 85, 'Runway kas 4.8 bulan dengan arus kas operasional positif.')}
+          ${renderHealthDimensionRow('revenue', 'Revenue (Pertumbuhan Omzet)', health.components.revenue, 'Omset tumbuh +11.8% vs bulan lalu. Sangat sehat.')}
+          ${renderHealthDimensionRow('profit', 'Profitabilitas (Margin Bersih)', health.components.profitability, 'Margin laba 20.0% melampaui target minimum (18%).')}
+          ${renderHealthDimensionRow('customer', 'Pelanggan & Retensi', health.components.customers, 'Retensi pelanggan 68.2% stabil di atas benchmark industri.')}
+          ${renderHealthDimensionRow('marketing', 'Efektivitas Pemasaran (ROI)', health.components.marketing, 'Email marketing sangat tinggi (ROI 6.0x), namun TikTok perlu realokasi.')}
+          ${renderHealthDimensionRow('inventory', 'Kesehatan Persediaan (Stok)', health.components.inventory, '2 SKU produk berada di bawah batas minimum (reorder point).')}
+          ${renderHealthDimensionRow('cashflow', 'Arus Kas (Cash Flow & Runway)', health.components.cashflow || 85, 'Runway kas 4.8 bulan dengan arus kas operasional positif.')}
         </div>
 
-        <div style="background: var(--bg-primary); padding: 12px 16px; border-radius: var(--radius-sm); border-left: 4px solid var(--ai-primary); font-size: 0.83rem; color: var(--text-secondary);">
-          💡 <strong>Rekomendasi AIbo:</strong> Lakukan pengisian stok House Blend 1kg dan optimasi campaign Email untuk mempertahankan skor kesehatan di atas 80+.
+        <div style="background: var(--bg-primary); padding: 12px 16px; border-radius: var(--radius-sm); border-left: 4px solid var(--ai-primary); font-size: 0.83rem; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px;">
+          <span style="color: var(--ai-primary);">${getIcon('insight', { size: 18 })}</span>
+          <div>
+            <strong>Rekomendasi AIbo:</strong> Lakukan pengisian stok House Blend 1kg dan optimasi campaign Email untuk mempertahankan skor kesehatan di atas 80+.
+          </div>
         </div>
       </div>
     </div>
@@ -409,7 +419,7 @@ export function renderDashboard(container, state, onNavigate) {
       <div class="card animate-fade-in" style="width: 100%; max-width: 540px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
           <h3 id="dash-modal-title" style="font-size: 1.15rem; font-weight: 700;">Detail Agenda / Metric</h3>
-          <button id="btn-close-dash-modal" style="background: none; border: none; color: var(--text-secondary); font-size: 1.4rem; cursor: pointer;">&times;</button>
+          <button id="btn-close-dash-modal" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center;">${getIcon('close', { size: 20 })}</button>
         </div>
         <div id="dash-modal-body" style="font-size: 0.88rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 12px;">
         </div>
@@ -421,7 +431,7 @@ export function renderDashboard(container, state, onNavigate) {
 }
 
 // Helper: Render 6 Dimensions in Health Modal
-function renderHealthDimensionRow(name, score, statusText) {
+function renderHealthDimensionRow(iconKey, name, score, statusText) {
   let color = 'var(--success)';
   if (score < 60) color = 'var(--danger)';
   else if (score < 80) color = 'var(--warning)';
@@ -429,7 +439,7 @@ function renderHealthDimensionRow(name, score, statusText) {
   return `
     <div style="display: flex; flex-direction: column; gap: 4px; background: var(--bg-primary); padding: 10px 14px; border-radius: 6px;">
       <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600;">
-        <span>${name}</span>
+        <span style="display: flex; align-items: center; gap: 6px;">${getIcon(iconKey, { size: 16 })} ${name}</span>
         <span style="color: ${color};">${score} / 100</span>
       </div>
       <div style="width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; margin: 4px 0;">
@@ -818,7 +828,7 @@ function bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavig
         const day = parseInt(cell.dataset.day, 10);
         const dayEvents = allEvents.filter(e => e.day === day && e.month === currentCalendarMonth);
         
-        modalTitle.textContent = `📅 Agenda Tanggal ${day} Agustus 2026`;
+        modalTitle.innerHTML = `<span style="display: inline-flex; align-items: center; gap: 6px;">${getIcon('calendar', { size: 18 })} Agenda Tanggal ${day} Agustus 2026</span>`;
         let eventsHtml = '';
         
         if (dayEvents.length > 0) {
@@ -831,7 +841,7 @@ function bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavig
                     <span style="font-size: 0.74rem; color: var(--text-muted); display: block;">⏰ ${ev.time} • ${ev.desc}</span>
                   </div>
                   ${ev.isCustom ? `
-                    <button class="btn btn-sm btn-secondary btn-delete-custom-evt" data-id="${ev.id}" style="color: var(--danger); padding: 2px 6px; font-size: 0.7rem;" title="Hapus Agenda">🗑️</button>
+                    <button class="btn btn-sm btn-secondary btn-delete-custom-evt" data-id="${ev.id}" style="color: var(--danger); padding: 4px 6px; display: flex; align-items: center;" title="Hapus Agenda">${getIcon('delete', { size: 14 })}</button>
                   ` : ''}
                 </div>
               `).join('')}
@@ -848,8 +858,8 @@ function bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavig
         modalBody.innerHTML = `
           ${eventsHtml}
           <div style="border-top: 1px solid var(--border-color); padding-top: 12px;">
-            <button class="btn btn-primary" id="btn-modal-add-agenda-here" style="width: 100%; font-size: 0.82rem; font-weight: 700;">
-              ➕ Tambah Catatan / Agenda untuk Tanggal Ini
+            <button class="btn btn-primary aibo-icon-btn" id="btn-modal-add-agenda-here" style="width: 100%; font-size: 0.82rem; font-weight: 700; justify-content: center;">
+              ${getIcon('plus', { size: 15 })} <span>Tambah Catatan / Agenda untuk Tanggal Ini</span>
             </button>
           </div>
         `;
@@ -887,7 +897,7 @@ function bindCalendarCellEvents(state, dashModal, modalTitle, modalBody, onNavig
 
 function renderAddEventForm(selectedDay, dashModal, modalTitle, modalBody, state, onNavigate) {
   dashModal.style.display = 'flex';
-  modalTitle.textContent = `➕ Tambah Agenda (${selectedDay} Agustus 2026)`;
+  modalTitle.innerHTML = `<span style="display: inline-flex; align-items: center; gap: 6px;">${getIcon('plus', { size: 18 })} Tambah Agenda (${selectedDay} Agustus 2026)</span>`;
   
   modalBody.innerHTML = `
     <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -938,8 +948,8 @@ function renderAddEventForm(selectedDay, dashModal, modalTitle, modalBody, state
 
       <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; border-top: 1px solid var(--border-color); padding-top: 10px;">
         <button class="btn btn-secondary btn-sm" id="btn-cancel-custom-evt">Batal</button>
-        <button class="btn btn-primary btn-sm" id="btn-save-custom-evt" style="font-weight: 700; padding: 8px 18px;">
-          💾 Simpan Agenda ke Kalender
+        <button class="btn btn-primary btn-sm aibo-icon-btn" id="btn-save-custom-evt" style="font-weight: 700; padding: 8px 18px;">
+          ${getIcon('check', { size: 14 })} <span>Simpan Agenda ke Kalender</span>
         </button>
       </div>
     </div>
@@ -993,16 +1003,16 @@ function renderAddEventForm(selectedDay, dashModal, modalTitle, modalBody, state
 function showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate, state) {
   let badgeColor = 'var(--primary)';
   let targetScreen = 'action';
-  let buttonLabel = 'Lihat di Action Center ➔';
+  let buttonLabel = 'Lihat di Action Center';
 
   if (ev.type === 'marketing') {
     badgeColor = '#ec4899';
     targetScreen = 'decision';
-    buttonLabel = 'Buka Rekomendasi di Decision Center ➔';
+    buttonLabel = 'Buka Rekomendasi di Decision Center';
   } else if (ev.type === 'inventory') {
     badgeColor = '#f59e0b';
     targetScreen = 'action';
-    buttonLabel = 'Buka Tugas Reorder di Action Center ➔';
+    buttonLabel = 'Buka Tugas Reorder di Action Center';
   } else if (ev.type === 'custom') {
     badgeColor = '#06b6d4';
     buttonLabel = 'Tutup';
@@ -1026,12 +1036,12 @@ function showEventModalDetail(ev, dashModal, modalTitle, modalBody, onNavigate, 
     </div>
     ${ev.isCustom ? `
       <div style="display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;">
-        <button class="btn btn-secondary btn-delete-custom-evt-single" data-id="${ev.id}" style="color: var(--danger);">🗑️ Hapus Agenda</button>
+        <button class="btn btn-secondary btn-delete-custom-evt-single aibo-icon-btn" data-id="${ev.id}" style="color: var(--danger);">${getIcon('delete', { size: 14 })} <span>Hapus Agenda</span></button>
         <button class="btn btn-primary" id="btn-modal-cal-close">Tutup</button>
       </div>
     ` : `
-      <button class="btn btn-primary" id="btn-modal-cal-goto" style="width: 100%; margin-top: 8px;">
-        ${buttonLabel}
+      <button class="btn btn-primary aibo-icon-btn" id="btn-modal-cal-goto" style="width: 100%; margin-top: 8px; justify-content: center;">
+        <span>${buttonLabel}</span> ${getIcon('arrow-right', { size: 14 })}
       </button>
     `}
   `;

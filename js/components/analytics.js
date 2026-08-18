@@ -5,6 +5,7 @@
 
 import { formatCurrency, formatPercent, formatNumber, renderLineChart, renderDonutChart, renderBarChart, showToast } from '../utils.js';
 import { renderContextHelp } from './contextHelp.js';
+import { getIcon } from '../icons.js';
 
 // ── Color palette for charts ──
 const CHART_COLORS = [
@@ -27,12 +28,12 @@ export function renderAnalytics(container, state, onNavigate) {
       <div class="animate-fade-in analytics-root">
         <!-- Tab Selector -->
         <div class="analytics-tabs" id="analytics-tabs">
-          ${renderTabButton('sales', '💰', 'Sales / Revenue')}
-          ${renderTabButton('profit', '📊', 'Profit')}
-          ${renderTabButton('customer', '👥', 'Customer')}
-          ${renderTabButton('marketing', '📣', 'Marketing')}
-          ${renderTabButton('inventory', '📦', 'Inventory')}
-          ${renderTabButton('cashflow', '💵', 'Cash Flow')}
+          ${renderTabButton('sales', 'revenue', 'Sales / Revenue')}
+          ${renderTabButton('profit', 'profit', 'Profit')}
+          ${renderTabButton('customer', 'customer', 'Customer')}
+          ${renderTabButton('marketing', 'marketing', 'Marketing')}
+          ${renderTabButton('inventory', 'inventory', 'Inventory')}
+          ${renderTabButton('cashflow', 'cashflow', 'Cash Flow')}
         </div>
 
         <!-- Date Range & Time Granularity Filter Bar (Stage J) -->
@@ -64,8 +65,8 @@ export function renderAnalytics(container, state, onNavigate) {
               </div>
             </div>
 
-            <button class="btn btn-secondary btn-sm" id="btn-export-csv" style="padding: 8px 14px; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;">
-              📥 Ekspor Data CSV (Simulasi)
+            <button class="btn btn-secondary btn-sm aibo-icon-btn" id="btn-export-csv" style="padding: 8px 14px; font-size: 0.8rem;">
+              ${getIcon('export', { size: 15 })} <span>Ekspor Data CSV</span>
             </button>
           </div>
         </div>
@@ -82,8 +83,10 @@ export function renderAnalytics(container, state, onNavigate) {
         <div id="analytics-chart-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
           <div class="card animate-fade-in" style="width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; background-color: var(--bg-secondary); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px; padding: 24px;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
-              <h3 id="chart-modal-title" style="font-size: 1.2rem; font-weight: 700; color: var(--primary);">Detail Visualisasi & Analisis Metrik</h3>
-              <button id="btn-close-chart-modal" style="background: none; border: none; color: var(--text-secondary); font-size: 1.4rem; cursor: pointer;">&times;</button>
+              <h3 id="chart-modal-title" style="font-size: 1.2rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                ${getIcon('chart-detail', { size: 20 })} <span>Detail Visualisasi & Analisis Metrik</span>
+              </h3>
+              <button id="btn-close-chart-modal" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center;">${getIcon('close', { size: 20 })}</button>
             </div>
             <div id="chart-modal-body" style="font-size: 0.88rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 14px;">
             </div>
@@ -95,11 +98,11 @@ export function renderAnalytics(container, state, onNavigate) {
     bindEvents();
   }
 
-  function renderTabButton(id, icon, label) {
+  function renderTabButton(id, iconKey, label) {
     const isActive = activeTab === id;
     return `
-      <button class="analytics-tab-btn ${isActive ? 'active' : ''}" data-tab="${id}">
-        <span class="tab-icon">${icon}</span>
+      <button class="analytics-tab-btn ${isActive ? 'active' : ''}" data-tab="${id}" style="display: inline-flex; align-items: center; gap: 6px;">
+        <span class="tab-icon" style="display: flex; align-items: center;">${getIcon(iconKey, { size: 16 })}</span>
         <span class="tab-label">${label}</span>
       </button>
     `;
@@ -136,7 +139,7 @@ export function renderAnalytics(container, state, onNavigate) {
     const num = parseFloat(pct);
     if (isNaN(num)) return '';
     const isUp = num >= 0;
-    return `<span class="change-tag ${isUp ? 'tag-up' : 'tag-down'}">${isUp ? '▲' : '▼'} ${Math.abs(num)}%</span>`;
+    return `<span class="change-tag ${isUp ? 'tag-up' : 'tag-down'}" style="display: inline-flex; align-items: center; gap: 3px;">${isUp ? getIcon('trend-up', { size: 12 }) : getIcon('trend-down', { size: 12 })} ${Math.abs(num)}%</span>`;
   }
 
   function kpiCard(title, value, subtext, color = 'var(--primary)', metricKey = '') {
@@ -156,7 +159,7 @@ export function renderAnalytics(container, state, onNavigate) {
       <div class="card" style="border-left: 4px solid var(--ai-primary); background: var(--bg-card-solid); margin-top: 24px; padding: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 1.3rem; color: var(--ai-primary);">✨</span>
+            <span style="color: var(--ai-primary); display: flex; align-items: center;">${getIcon('copilot', { size: 18 })}</span>
             <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0;">
               Penjelasan Cerdas AIbo: ${title}
             </h4>
@@ -182,8 +185,8 @@ export function renderAnalytics(container, state, onNavigate) {
         </div>
 
         <div style="display: flex; justify-content: flex-end; margin-top: 14px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
-          <button class="btn btn-primary btn-sm btn-goto-decision-rec" style="font-size: 0.78rem; padding: 6px 14px;">
-            💡 Lihat Rekomendasi Terkait di Decision Center ➔
+          <button class="btn btn-primary btn-sm btn-goto-decision-rec aibo-icon-btn" style="font-size: 0.78rem; padding: 6px 14px;">
+            ${getIcon('recommendation', { size: 14 })} <span>Lihat Rekomendasi Terkait di Decision Center</span> ${getIcon('arrow-right', { size: 13 })}
           </button>
         </div>
       </div>
@@ -194,7 +197,9 @@ export function renderAnalytics(container, state, onNavigate) {
   function renderPeriodComparisonCard() {
     return `
       <div class="card" style="margin-top: 24px;">
-        <h3 class="card-title">📊 Perbandingan Kinerja Periode (Bulan Ini vs Bulan Lalu vs Target)</h3>
+        <h3 class="card-title" style="display: flex; align-items: center; gap: 8px;">
+          ${getIcon('comparison', { size: 18 })} <span>Perbandingan Kinerja Periode (Bulan Ini vs Bulan Lalu vs Target)</span>
+        </h3>
         <div class="analytics-table-wrap" style="margin-top: 12px;">
           <div class="analytics-table-header" style="grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 1.2fr;">
             <span>Metrik Bisnis</span>

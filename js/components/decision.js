@@ -1,10 +1,6 @@
-// decision.js
-// Decision Center for AIbo MVP Phase 4.5
-// Features: Interactive Multi-Choice Decision Options, Team Workflow Approval System,
-// 8-Step Explainability Modal, Context-Aware AI Copilot with Typing Indicator.
-
 import { formatCurrency, formatPercent, formatNumber, showToast } from '../utils.js';
 import { applyRecommendation, submitApprovalRequest, respondApprovalRequest } from '../state.js';
+import { getIcon } from '../icons.js';
 
 export function renderDecision(container, state, onNavigate) {
   const recommendations = state.recommendations || [];
@@ -54,7 +50,7 @@ export function renderDecision(container, state, onNavigate) {
           <div class="card" style="border-left: 4px solid var(--warning); background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-card) 100%);">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 1.2rem;">⏳</span>
+                <span style="color: var(--warning); display: flex; align-items: center;">${getIcon('pending', { size: 20 })}</span>
                 <div>
                   <strong style="font-size: 0.95rem; color: var(--text-primary);">Antrean Persetujuan Tim (${pendingApprovals.length} Menunggu Persetujuan)</strong>
                   <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">
@@ -81,11 +77,11 @@ export function renderDecision(container, state, onNavigate) {
 
                   ${isOwner ? `
                     <div style="display: flex; gap: 8px;">
-                      <button class="btn btn-secondary btn-sm btn-reject-approval" data-id="${appr.id}" style="padding: 6px 12px; font-size: 0.75rem; color: var(--danger); border-color: var(--danger);">
-                        ✕ Tolak
+                      <button class="btn btn-secondary btn-sm btn-reject-approval aibo-icon-btn" data-id="${appr.id}" style="padding: 6px 12px; font-size: 0.75rem; color: var(--danger); border-color: var(--danger);">
+                        ${getIcon('reject', { size: 14 })} <span>Tolak</span>
                       </button>
-                      <button class="btn btn-primary btn-sm btn-approve-approval" data-id="${appr.id}" style="padding: 6px 12px; font-size: 0.75rem; background: var(--success); border-color: var(--success);">
-                        ✓ Setujui (Approve)
+                      <button class="btn btn-primary btn-sm btn-approve-approval aibo-icon-btn" data-id="${appr.id}" style="padding: 6px 12px; font-size: 0.75rem; background: var(--success); border-color: var(--success);">
+                        ${getIcon('approve', { size: 14 })} <span>Setujui</span>
                       </button>
                     </div>
                   ` : `
@@ -126,7 +122,7 @@ export function renderDecision(container, state, onNavigate) {
             <div class="card">
               <div class="card-title">
                 <span style="display: flex; align-items: center; gap: 8px;">
-                  <span>🧠</span> Panel Optimalisasi Keputusan AIbo
+                  <span style="color: var(--primary); display: flex; align-items: center;">${getIcon('decision', { size: 20 })}</span> <strong>Panel Optimalisasi Keputusan AIbo</strong>
                 </span>
                 <span class="badge" style="background-color: var(--ai-primary-glow); color: var(--ai-primary);">
                   ${filteredRecs.length} Rekomendasi Multi-Opsi
@@ -164,8 +160,8 @@ export function renderDecision(container, state, onNavigate) {
 
                       <!-- Multi-Choice Decision Options Selector -->
                       <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 12px;">
-                        <span style="font-size: 0.78rem; font-weight: 700; color: var(--ai-primary); display: block; margin-bottom: 8px;">
-                          ⚙️ Pilih Skenario Alokasi Keputusan:
+                        <span style="font-size: 0.78rem; font-weight: 700; color: var(--ai-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                          ${getIcon('option', { size: 14 })} <span>Pilih Skenario Alokasi Keputusan:</span>
                         </span>
                         
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
@@ -199,24 +195,24 @@ export function renderDecision(container, state, onNavigate) {
 
                       <!-- Actions & Workflow Buttons -->
                       <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; border-top: 1px dashed var(--border-color); padding-top: 10px; flex-wrap: wrap; gap: 8px;">
-                        <button class="btn btn-secondary btn-sm btn-detail-8step" data-id="${r.id}" style="padding: 6px 12px; font-size: 0.75rem;">
-                          🔍 Struktur 8-Langkah
+                        <button class="btn btn-secondary btn-sm btn-detail-8step aibo-icon-btn" data-id="${r.id}" style="padding: 6px 12px; font-size: 0.75rem;">
+                          ${getIcon('evidence', { size: 14 })} <span>Struktur 8-Langkah</span>
                         </button>
 
                         <div style="display: flex; gap: 8px;">
                           ${isPending ? (
                             isManager ? `
-                              <button class="btn btn-secondary btn-sm btn-submit-approval" data-id="${r.id}" style="padding: 6px 14px; font-size: 0.75rem; color: var(--ai-primary); border-color: var(--ai-primary);">
-                                📤 Ajukan Persetujuan ke Owner
+                              <button class="btn btn-secondary btn-sm btn-submit-approval aibo-icon-btn" data-id="${r.id}" style="padding: 6px 14px; font-size: 0.75rem; color: var(--ai-primary); border-color: var(--ai-primary);">
+                                ${getIcon('export', { size: 14 })} <span>Ajukan Persetujuan ke Owner</span>
                               </button>
                             ` : `
-                              <button class="btn btn-primary btn-sm btn-exec-with-confirm" data-id="${r.id}" style="padding: 6px 14px; font-size: 0.75rem;">
-                                ⚡ Eksekusi Skenario (${currentOptData.name})
+                              <button class="btn btn-primary btn-sm btn-exec-with-confirm aibo-icon-btn" data-id="${r.id}" style="padding: 6px 14px; font-size: 0.75rem;">
+                                ${getIcon('recommendation', { size: 14 })} <span>Eksekusi Skenario (${currentOptData.name})</span>
                               </button>
                             `
                           ) : `
-                            <span style="color: var(--success); font-weight: bold; font-size: 0.8rem;">
-                              ✓ Telah Diterapkan (${currentOptData.name})
+                            <span style="color: var(--success); font-weight: bold; font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">
+                              ${getIcon('check', { size: 14 })} Telah Diterapkan (${currentOptData.name})
                             </span>
                           `}
                         </div>
@@ -232,7 +228,7 @@ export function renderDecision(container, state, onNavigate) {
           <div class="card" style="display: flex; flex-direction: column; height: calc(100vh - 180px); min-height: 540px; justify-content: space-between; padding: 18px; position: sticky; top: 20px;">
             <div class="card-title" style="margin-bottom: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
               <span style="display: flex; align-items: center; gap: 8px;">
-                <span style="color: var(--ai-primary); font-size: 1.2rem;">🤖</span>
+                <span style="color: var(--ai-primary); display: flex; align-items: center;">${getIcon('copilot', { size: 20 })}</span>
                 <span>AI Business Copilot</span>
               </span>
               <span class="badge" style="background: var(--success-glow); color: var(--success); font-size: 0.65rem;">Sesi: ${userRole}</span>
@@ -248,16 +244,16 @@ export function renderDecision(container, state, onNavigate) {
               
               ${isThinking ? `
                 <div style="align-self: flex-start; background: var(--bg-input); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--ai-primary); display: flex; align-items: center; gap: 8px;">
-                  <span>⏳</span> <em>AIbo sedang menganalisis simulasi skenario...</em>
+                  ${getIcon('loading', { size: 16 })} <em>AIbo sedang menganalisis simulasi skenario...</em>
                 </div>
               ` : ''}
             </div>
 
             <!-- Quick Prompt Chips -->
             <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 6px; scrollbar-width: none;">
-              <button class="btn btn-secondary btn-prompt-chip" data-prompt="Apa beda Opsi Agresif vs Seimbang?" style="padding: 4px 8px; font-size: 0.72rem; white-space: nowrap;">⚖️ Komparasi Opsi</button>
-              <button class="btn btn-secondary btn-prompt-chip" data-prompt="Mengapa ROI TikTok Ads turun?" style="padding: 4px 8px; font-size: 0.72rem; white-space: nowrap;">📉 TikTok ROI</button>
-              <button class="btn btn-secondary btn-prompt-chip" data-prompt="Produk apa yang stoknya kritis?" style="padding: 4px 8px; font-size: 0.72rem; white-space: nowrap;">📦 Stok Kritis</button>
+              <button class="btn btn-secondary btn-prompt-chip aibo-icon-btn" data-prompt="Apa beda Opsi Agresif vs Seimbang?" style="padding: 4px 8px; font-size: 0.72rem; white-space: nowrap;">${getIcon('option', { size: 12 })} <span>Komparasi Opsi</span></button>
+              <button class="btn btn-secondary btn-prompt-chip aibo-icon-btn" data-prompt="Mengapa ROI TikTok Ads turun?" style="padding: 4px 8px; font-size: 0.72rem; white-space: nowrap;">${getIcon('marketing', { size: 12 })} <span>TikTok ROI</span></button>
+              <button class="btn btn-secondary btn-prompt-chip aibo-icon-btn" data-prompt="Produk apa yang stoknya kritis?" style="padding: 4px 8px; font-size: 0.72rem; white-space: nowrap;">${getIcon('inventory', { size: 12 })} <span>Stok Kritis</span></button>
             </div>
 
             <!-- Input Bar -->
@@ -326,29 +322,29 @@ export function renderDecision(container, state, onNavigate) {
         <div class="card animate-fade-in" style="max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color-hover); box-shadow: var(--shadow-lg); padding: 24px;">
           
           <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
-            <h3 style="font-size: 1.15rem; font-family: var(--font-display); font-weight: 700; color: var(--primary);">
-              🧠 Struktur Keputusan AIbo (8 Langkah Explainability)
+            <h3 style="font-size: 1.15rem; font-family: var(--font-display); font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+              ${getIcon('decision', { size: 20 })} <span>Struktur Keputusan AIbo (8 Langkah Explainability)</span>
             </h3>
-            <button class="btn btn-secondary btn-sm" id="btn-close-8step-modal" style="padding: 4px 10px;">&times;</button>
+            <button class="btn btn-secondary btn-sm" id="btn-close-8step-modal" style="padding: 4px 8px; display: flex; align-items: center;">${getIcon('close', { size: 18 })}</button>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.85rem;">
             
             <!-- Step 1: Summary -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: 6px; border-left: 4px solid var(--primary);">
-              <strong style="color: var(--text-primary);">1. Ringkasan Eksekutif (Summary):</strong>
+              <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px;">${getIcon('chart-detail', { size: 15 })} 1. Ringkasan Eksekutif (Summary):</strong>
               <p style="color: var(--text-secondary); margin-top: 4px;">${rec.title} — ${rec.description}</p>
             </div>
 
             <!-- Step 2: Root Cause -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: 6px; border-left: 4px solid var(--danger);">
-              <strong style="color: var(--text-primary);">2. Akar Masalah (Root Cause):</strong>
+              <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px;">${getIcon('cause', { size: 15 })} 2. Akar Masalah (Root Cause):</strong>
               <p style="color: var(--text-secondary); margin-top: 4px;">${rec.reason}</p>
             </div>
 
             <!-- Step 3: Evidence -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: 6px; border-left: 4px solid var(--warning);">
-              <strong style="color: var(--text-primary);">3. Bukti Data Pendukung (Evidence):</strong>
+              <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px;">${getIcon('evidence', { size: 15 })} 3. Bukti Data Pendukung (Evidence):</strong>
               <ul style="padding-left: 18px; margin-top: 4px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px;">
                 ${relatedInsight ? relatedInsight.evidence.map(e => `<li>${e}</li>`).join('') : '<li>Log transaksi penjualan Agustus 2026</li>'}
               </ul>
@@ -356,7 +352,7 @@ export function renderDecision(container, state, onNavigate) {
 
             <!-- Step 4: Impact Projection -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: 6px; border-left: 4px solid var(--success);">
-              <strong style="color: var(--text-primary);">4. Proyeksi Dampak Kuantitatif (${currentOptData.name}):</strong>
+              <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px;">${getIcon('impact', { size: 15 })} 4. Proyeksi Dampak Kuantitatif (${currentOptData.name}):</strong>
               <p style="color: var(--success); font-weight: 700; margin-top: 4px;">
                 ${currentOptData.fullImpact}
               </p>
@@ -364,7 +360,7 @@ export function renderDecision(container, state, onNavigate) {
 
             <!-- Step 5: Alternative Options -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: 6px; border-left: 4px solid var(--ai-primary);">
-              <strong style="color: var(--text-primary);">5. Opsi Alternatif Skenario Yang Dipilih:</strong>
+              <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px;">${getIcon('option', { size: 15 })} 5. Opsi Alternatif Skenario Yang Dipilih:</strong>
               <p style="color: var(--text-secondary); margin-top: 4px;">
                 Terpilih: <strong>${currentOptData.name}</strong> (${currentOptData.amountText}). Estimasi risiko: ${currentOptData.risk}.
               </p>
@@ -372,13 +368,13 @@ export function renderDecision(container, state, onNavigate) {
 
             <!-- Step 6: Consequences of Inaction -->
             <div style="background: var(--bg-primary); padding: 12px; border-radius: 6px; border-left: 4px solid var(--danger);">
-              <strong style="color: var(--text-primary);">6. Konsekuensi Jika Dibiarkan:</strong>
+              <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px;">${getIcon('consequence', { size: 15 })} 6. Konsekuensi Jika Dibiarkan:</strong>
               <p style="color: var(--text-secondary); margin-top: 4px;">Potensi kerugian efisiensi anggaran hingga Rp 5.000.000/bulan & penurunan skor marketing sebesar 6 poin.</p>
             </div>
 
             <!-- Step 7: AI Recommendation -->
             <div style="background: var(--primary-glow); padding: 12px; border-radius: 6px; border: 1px solid var(--primary);">
-              <strong style="color: var(--primary);">7. Rekomendasi Terpilih AIbo:</strong>
+              <strong style="color: var(--primary); display: flex; align-items: center; gap: 6px;">${getIcon('recommendation', { size: 15 })} 7. Rekomendasi Terpilih AIbo:</strong>
               <p style="color: var(--text-primary); font-weight: 600; margin-top: 4px;">Terapkan strategi alokasi ${currentOptData.name} untuk efisiensi maksimal.</p>
             </div>
 
@@ -387,16 +383,16 @@ export function renderDecision(container, state, onNavigate) {
               <button class="btn btn-secondary" id="btn-close-8step-modal-2">Tutup</button>
               ${isPending ? (
                 isManager ? `
-                  <button class="btn btn-secondary btn-submit-approval" data-id="${rec.id}">
-                    📤 Ajukan Persetujuan ke Owner
+                  <button class="btn btn-secondary btn-submit-approval aibo-icon-btn" data-id="${rec.id}">
+                    ${getIcon('export', { size: 14 })} <span>Ajukan Persetujuan ke Owner</span>
                   </button>
                 ` : `
-                  <button class="btn btn-primary btn-exec-with-confirm" data-id="${rec.id}">
-                    ⚡ 8. Eksekusi Skenario (${currentOptData.name})
+                  <button class="btn btn-primary btn-exec-with-confirm aibo-icon-btn" data-id="${rec.id}">
+                    ${getIcon('recommendation', { size: 14 })} <span>8. Eksekusi Skenario (${currentOptData.name})</span>
                   </button>
                 `
               ) : `
-                <span style="color: var(--success); font-weight: bold; align-self: center;">✓ Keputusan Telah Diterapkan</span>
+                <span style="color: var(--success); font-weight: bold; align-self: center; display: flex; align-items: center; gap: 4px;">${getIcon('check', { size: 14 })} Keputusan Telah Diterapkan</span>
               `}
             </div>
 

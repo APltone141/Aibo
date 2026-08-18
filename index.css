@@ -176,7 +176,17 @@ textarea {
 
 .sidebar.collapsed .sidebar-logo {
   justify-content: center;
-  padding: 20px 10px;
+  padding: 16px 8px;
+}
+
+.sidebar.collapsed .sidebar-logo-img {
+  max-width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.sidebar.collapsed .sidebar-toggle-btn {
+  margin-top: 6px;
 }
 
 .sidebar.collapsed .nav-item {
@@ -190,7 +200,7 @@ textarea {
 }
 
 .sidebar-logo {
-  padding: 20px 24px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -201,6 +211,15 @@ textarea {
   display: flex;
   align-items: center;
   gap: 12px;
+  text-decoration: none;
+}
+
+.sidebar-logo-img {
+  height: 38px;
+  max-width: 140px;
+  object-fit: contain;
+  display: block;
+  transition: all var(--transition-fast);
 }
 
 .sidebar-toggle-btn {
@@ -1066,4 +1085,63 @@ textarea {
 
 .mobile-more-item:hover {
   background: var(--bg-card-hover);
+}
+
+/* ==========================================================================
+   AIbo Custom SVG Icon System Utilities
+   ========================================================================== */
+.aibo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+  stroke-width: 2;
+  stroke: currentColor;
+  fill: none;
+  transition: transform var(--transition-fast), stroke var(--transition-fast);
+}
+
+.aibo-icon-xs {
+  width: 14px;
+  height: 14px;
+}
+
+.aibo-icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.aibo-icon-md {
+  width: 20px;
+  height: 20px;
+}
+
+.aibo-icon-lg {
+  width: 24px;
+  height: 24px;
+}
+
+.aibo-icon-xl {
+  width: 32px;
+  height: 32px;
+}
+
+.aibo-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aibo-spin {
+  animation: aibo-spin-kf 1s linear infinite;
+}
+
+@keyframes aibo-spin-kf {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.badge .aibo-icon {
+  margin-right: 4px;
 }

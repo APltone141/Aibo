@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { showToast } from '../utils.js';
+import { getIcon } from '../icons.js';
 
 export function renderLogin(container, onNavigate) {
   container.innerHTML = `
@@ -11,9 +12,9 @@ export function renderLogin(container, onNavigate) {
       <div class="card" style="max-width: 440px; width: 100%; padding: 36px; display: flex; flex-direction: column; gap: 24px; background: var(--bg-card-solid);">
         
         <!-- Brand Header -->
-        <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-          <div class="logo-icon" style="width: 48px; height: 48px; font-size: 1.8rem; border-radius: var(--radius-md);">A</div>
-          <h2 style="font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+          <img src="./Asset/aibo logo.png" alt="AIbo Logo" style="height: 56px; max-width: 190px; object-fit: contain;" />
+          <h2 style="font-size: 1.55rem; font-weight: 800; background: linear-gradient(135deg, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
             ${t('login_title', 'Masuk ke AIbo')}
           </h2>
           <p style="font-size: 0.85rem; color: var(--text-secondary);">
@@ -21,15 +22,17 @@ export function renderLogin(container, onNavigate) {
           </p>
         </div>
 
-        <!-- Demo Quick Login Chips -->
+        <!-- Quick Login Chips -->
         <div style="background: var(--bg-primary); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;">
-          <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">⚡ Akses Cepat Demo:</span>
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
+            ${getIcon('recommendation', { size: 14 })} <span>Akses Cepat Akun:</span>
+          </span>
           <div style="display: flex; gap: 8px;">
-            <button class="btn btn-secondary" id="btn-quick-owner" style="flex: 1; padding: 6px 10px; font-size: 0.78rem;">
-              👨‍💼 Pemilik (Ardi P.)
+            <button class="btn btn-secondary aibo-icon-btn" id="btn-quick-owner" style="flex: 1; padding: 6px 10px; font-size: 0.78rem; justify-content: center;">
+              ${getIcon('profile', { size: 14 })} <span>Pemilik (Ardi P.)</span>
             </button>
-            <button class="btn btn-secondary" id="btn-quick-manager" style="flex: 1; padding: 6px 10px; font-size: 0.78rem;">
-              👩‍💼 Manajer (Nadia S.)
+            <button class="btn btn-secondary aibo-icon-btn" id="btn-quick-manager" style="flex: 1; padding: 6px 10px; font-size: 0.78rem; justify-content: center;">
+              ${getIcon('team', { size: 14 })} <span>Manajer (Nadia S.)</span>
             </button>
           </div>
         </div>
@@ -53,8 +56,8 @@ export function renderLogin(container, onNavigate) {
             <a href="#" id="link-forgot-pass" style="color: var(--primary); text-decoration: none; font-weight: 600;">Lupa Sandi?</a>
           </div>
 
-          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-weight: 700; margin-top: 4px;">
-            Masuk ke Dashboard
+          <button type="submit" class="btn btn-primary aibo-icon-btn" style="width: 100%; padding: 12px; font-weight: 700; margin-top: 4px; justify-content: center;">
+            <span>Masuk ke Dashboard</span> ${getIcon('arrow-right', { size: 16 })}
           </button>
         </form>
 
@@ -64,9 +67,9 @@ export function renderLogin(container, onNavigate) {
           <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
         </div>
 
-        <!-- Social Login Simulation Button -->
-        <button class="btn btn-secondary" id="btn-google-login" style="width: 100%; padding: 10px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <span>🌐</span> Google Login — Prototype Simulation
+        <!-- Google Login Button -->
+        <button class="btn btn-secondary aibo-icon-btn" id="btn-google-login" style="width: 100%; padding: 10px; font-size: 0.85rem; justify-content: center;">
+          ${getIcon('globe', { size: 16 })} <span>Masuk dengan Google</span>
         </button>
 
         <div style="text-align: center; font-size: 0.85rem; color: var(--text-secondary);">
@@ -111,8 +114,8 @@ export function renderRegister(container, onNavigate) {
       // Step 1: Registration Form inputs
       return `
         <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-          <div class="logo-icon" style="width: 44px; height: 44px; font-size: 1.6rem; border-radius: var(--radius-md);">A</div>
-          <h2 style="font-size: 1.5rem; font-weight: 800;">${t('register_title', 'Daftar Akun Baru')}</h2>
+          <img src="./Asset/aibo logo.png" alt="AIbo Logo" style="height: 50px; max-width: 170px; object-fit: contain;" />
+          <h2 style="font-size: 1.45rem; font-weight: 800;">${t('register_title', 'Daftar Akun Baru')}</h2>
           <p style="font-size: 0.85rem; color: var(--text-secondary);">Mulai gunakan AIbo untuk keputusan bisnis lebih cerdas</p>
         </div>
 
@@ -150,8 +153,8 @@ export function renderRegister(container, onNavigate) {
       // Step 2: Verification Code (OTP) Form for Register
       return `
         <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-          <div class="logo-icon" style="width: 44px; height: 44px; font-size: 1.6rem; border-radius: var(--radius-md);">A</div>
-          <h2 style="font-size: 1.5rem; font-weight: 800;">Verifikasi Alamat Email</h2>
+          <img src="./Asset/aibo logo.png" alt="AIbo Logo" style="height: 50px; max-width: 170px; object-fit: contain;" />
+          <h2 style="font-size: 1.45rem; font-weight: 800;">Verifikasi Alamat Email</h2>
           <p style="font-size: 0.85rem; color: var(--text-secondary);">
             Kode OTP pendaftaran dikirim ke: <strong>${regDetails.email}</strong>
           </p>

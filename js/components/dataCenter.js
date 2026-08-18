@@ -4,6 +4,7 @@
 // Platform Sync Simulation, File Upload Wizard, and Data Quality Scorecard.
 
 import { formatPercent, formatNumber, showToast } from '../utils.js';
+import { getIcon } from '../icons.js';
 
 export function renderDataCenter(container, state, onNavigate) {
   const dataQuality = state.data_quality || { overall_score: 91, completeness: 94, accuracy: 92, consistency: 89, freshness: 88, issues: [] };
@@ -99,9 +100,9 @@ export function renderDataCenter(container, state, onNavigate) {
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
               <div style="flex: 1; min-width: 280px;">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                  <span style="font-size: 1.2rem;">💡</span>
+                  <span style="color: var(--ai-primary); display: flex; align-items: center;">${getIcon('insight', { size: 20 })}</span>
                   <strong style="font-size: 0.98rem; color: var(--text-primary); font-family: var(--font-display);">
-                    Status Kesiapan Data: Analisis Anda Berjalan Optimal (Kualitas ${dataQuality.overall_score}%)
+                    Status Kesiapan Data: Analisis Berjalan Optimal (Kualitas ${dataQuality.overall_score}%)
                   </strong>
                 </div>
                 <p style="font-size: 0.83rem; color: var(--text-secondary); line-height: 1.5;">
@@ -109,12 +110,12 @@ export function renderDataCenter(container, state, onNavigate) {
                   Data yang belum lengkap hanya membatasi analisis lanjutan tertentu, namun <strong>TIDAK menonaktifkan</strong> dashboard bisnis Anda.
                 </p>
                 <div style="display: flex; gap: 14px; margin-top: 10px; font-size: 0.78rem; flex-wrap: wrap;">
-                  <span style="color: var(--success); font-weight: 600;">✓ Data Penjualan Terhubung</span>
-                  <span style="color: var(--success); font-weight: 600;">✓ Data Stok Terhubung</span>
-                  <span style="color: var(--warning); font-weight: 600;">⚠ Data Iklan (Bisa Dilengkapi Kapan Saja)</span>
+                  <span style="color: var(--success); font-weight: 600; display: flex; align-items: center; gap: 4px;">${getIcon('check', { size: 14 })} Data Penjualan Terhubung</span>
+                  <span style="color: var(--success); font-weight: 600; display: flex; align-items: center; gap: 4px;">${getIcon('check', { size: 14 })} Data Stok Terhubung</span>
+                  <span style="color: var(--warning); font-weight: 600; display: flex; align-items: center; gap: 4px;">${getIcon('pending', { size: 14 })} Data Iklan (Bisa Dilengkapi Kapan Saja)</span>
                 </div>
               </div>
-              <button class="btn btn-secondary btn-sm" id="btn-dismiss-missing-guide" style="font-size: 0.78rem;">Paham 👍</button>
+              <button class="btn btn-secondary btn-sm" id="btn-dismiss-missing-guide" style="font-size: 0.78rem;">Paham</button>
             </div>
           </div>
 
@@ -122,7 +123,7 @@ export function renderDataCenter(container, state, onNavigate) {
           <div class="card" style="border: 2px solid var(--primary); background: var(--primary-glow); padding: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
               <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                <span>🎯</span> Rekomendasi Integrasi Data Berikutnya
+                ${getIcon('recommendation', { size: 16 })} <span>Rekomendasi Integrasi Data Berikutnya</span>
               </span>
               <span class="badge badge-medium">Target: Marketing ROI</span>
             </div>
@@ -139,7 +140,9 @@ export function renderDataCenter(container, state, onNavigate) {
               <span style="font-size: 0.76rem; color: var(--text-muted);">Dampak: Membuka fitur rekomendasi alokasi budget otomatis.</span>
               <div style="display: flex; gap: 8px;">
                 <button class="btn btn-secondary btn-sm" id="btn-remind-data-later" style="font-size: 0.78rem;">Ingatkan Nanti</button>
-                <button class="btn btn-primary btn-sm" id="btn-connect-recommended" style="font-size: 0.78rem;">+ Hubungkan Data Iklan</button>
+                <button class="btn btn-primary btn-sm aibo-icon-btn" id="btn-connect-recommended" style="font-size: 0.78rem;">
+                  ${getIcon('plus', { size: 13 })} <span>Hubungkan Data Iklan</span>
+                </button>
               </div>
             </div>
           </div>
@@ -148,7 +151,7 @@ export function renderDataCenter(container, state, onNavigate) {
           <div class="card">
             <div class="card-title">
               <span style="display: flex; align-items: center; gap: 8px;">
-                <span>📚</span> Panduan & Status Sumber Data Usaha
+                <span style="color: var(--primary); display: flex; align-items: center;">${getIcon('dataCenter', { size: 18 })}</span> <strong>Panduan & Status Sumber Data Usaha</strong>
               </span>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Klasifikasi Kebutuhan AIbo</span>
             </div>
@@ -196,7 +199,7 @@ export function renderDataCenter(container, state, onNavigate) {
           <div class="card">
             <div class="card-title">
               <span style="display: flex; align-items: center; gap: 8px;">
-                <span>📤</span> Wizard Unggah File Dataset Usaha
+                <span style="color: var(--primary); display: flex; align-items: center;">${getIcon('upload', { size: 18 })}</span> <strong>Unggah File Dataset Usaha</strong>
               </span>
               <span class="badge" style="background: var(--primary-glow); color: var(--primary);">CSV / XLSX / JSON</span>
             </div>
@@ -205,7 +208,7 @@ export function renderDataCenter(container, state, onNavigate) {
             </p>
             
             <div style="border: 2px dashed ${isUploading ? 'var(--primary)' : 'var(--border-color)'}; border-radius: var(--radius-sm); padding: 28px; text-align: center; cursor: pointer; background: var(--bg-input); transition: all var(--transition-fast);" id="data-drop-zone">
-              <div style="font-size: 2.5rem; margin-bottom: 8px; color: var(--primary);">📤</div>
+              <div style="margin-bottom: 8px; color: var(--primary); display: flex; justify-content: center;">${getIcon('upload', { size: 36 })}</div>
               <h4 style="font-size: 1rem; margin-bottom: 6px; font-family: var(--font-display);">
                 ${isUploading ? 'Memproses & Memvalidasi File Dataset...' : 'Klik atau Drag & Drop File Transaksi di Sini'}
               </h4>
@@ -232,7 +235,7 @@ export function renderDataCenter(container, state, onNavigate) {
           <!-- Recurring Data Reminders Banner -->
           <div class="card" style="border-left: 4px solid var(--warning);">
             <strong style="font-size: 0.92rem; color: var(--text-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-              <span>⏰</span> Jadwal Pengingat Data
+              <span style="color: var(--warning); display: flex; align-items: center;">${getIcon('bell', { size: 16 })}</span> <span>Jadwal Pengingat Data</span>
             </strong>
             <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">
               Atur frekuensi AIbo mengingatkan Anda untuk menyinkronkan data:
